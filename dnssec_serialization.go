@@ -83,6 +83,7 @@ type LeavingDS struct {
 }
 
 type LeavingOther struct {
+	Leaving
 	num_rrs uint8
 	rrs     []RRData
 }
