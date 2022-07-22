@@ -25,7 +25,7 @@ type Signature struct {
 	expires   uint32
 	begins    uint32
 	key_tag   uint16
-	signature string `dns:"base64"`
+	signature []byte
 }
 
 type Key struct {
@@ -37,7 +37,7 @@ type DNSKEY_Rdata struct {
 	flags      uint16
 	protocol   uint8
 	algorithm  uint8
-	public_key string `dns:"base64"`
+	public_key []byte
 }
 
 type Entering struct {
@@ -54,7 +54,7 @@ type SerialDS struct {
 	algorithm   uint8
 	digest_type uint8
 	digest_len  uint16
-	digest      string `dns:"hex"`
+	digest      []byte
 }
 
 type RRType uint16

@@ -24,9 +24,6 @@ func (rr *Signature) len(off int, compression map[string]struct{}) int {
 	l += 4 // expires
 	l += 4 // begins
 	l += 2 // key_tag
-
-  // don't need to add 1, because we are not including the
-  // string "len" field in the serialization.
 	l += len(rr.signature)
 	return l
 }
@@ -57,9 +54,6 @@ func (rr *SerialDS) len(off int, compression map[string]struct{}) int {
 	l += 1 // algorithm
 	l += 1 // digest_type
 	l += 2 // digest_len
-
-  // don't need to add 1, because we are not including the
-  // string "len" field in the serialization.
 	l += len(rr.digest)
 	return l
 }
@@ -72,9 +66,6 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
   // string "len" field in the serialization.
 	l += len(rr.next_name)
 	l += 2 // rrtype
-
-  // don't need to add 1, because we are not including the
-  // string "len" field in the serialization.
 	l += rr.rrsig.len(l, compression)
 	return l
 }
@@ -122,9 +113,6 @@ func (rr *DNSKEY_Rdata) len(off int, compression map[string]struct{}) int {
 	l := 2 // flags
 	l += 1 // protocol
 	l += 1 // algorithm
-
-  // don't need to add 1, because we are not including the
-  // string "len" field in the serialization.
 	l += len(rr.public_key)
 	return l
 }
