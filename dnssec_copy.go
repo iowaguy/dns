@@ -3,7 +3,7 @@ package dns
 import "strings"
 
 func (rr *ZonePair) copy() RR {
-	return *copyZonePair(rr)
+	return copyZonePair(rr)
 }
 
 func (rr *DNSSECProof) copy() RR {

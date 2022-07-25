@@ -12,15 +12,15 @@ func TestCopyDNSSEC(t *testing.T) {
 		expires:   1,
 		begins:    1,
 		key_tag:   1,
-		signature: "123",
+		signature: []byte("123"),
 	}
 	dnskey_rdata := &DNSKEY_Rdata{
 		flags:      1,
 		protocol:   1,
 		algorithm:  1,
-		public_key: "abc",
+		public_key: []byte("abc"),
 	}
-	key := &Key{numRdatas: 1, []DNSKEY_Rdata{*dnskey_rdata}}
+	key := &Key{1, []DNSKEY_Rdata{*dnskey_rdata}}
 	entry := &Entering{
 		length:          1,
 		zType:           EnteringType,
@@ -32,7 +32,7 @@ func TestCopyDNSSEC(t *testing.T) {
 	exit := &Leaving{
 		length:    1,
 		zType:     LeavingType,
-		next_name: "123",
+		next_name: "example.com",
 		rrtype:    RRType(TypeTXT),
 		rrsig:     *sig,
 	}
@@ -41,7 +41,7 @@ func TestCopyDNSSEC(t *testing.T) {
 		exit:  *exit,
 	}
 
-	rrs := []RR{*zp}
+	rrs := []RR{zp}
 
 	for _, rr := range rrs {
 		rr1 := rr.copy()
