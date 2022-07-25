@@ -30,11 +30,12 @@ type Signature struct {
 }
 
 type Key struct {
-	length uint16
-	rdata  []DNSKEY_Rdata
+	numRdatas uint16
+	rdata     []DNSKEY_Rdata
 }
 
 type DNSKEY_Rdata struct {
+	length     uint16
 	flags      uint16
 	protocol   uint8
 	algorithm  uint8
@@ -51,6 +52,7 @@ type Entering struct {
 }
 
 type SerialDS struct {
+	length      uint16
 	key_tag     uint16
 	algorithm   uint8
 	digest_type uint8

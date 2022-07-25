@@ -30,7 +30,7 @@ func (rr *Signature) String() string {
 		strconv.Itoa(int(rr.expires)) + " " +
 		strconv.Itoa(int(rr.begins)) + " " +
 		strconv.Itoa(int(rr.key_tag)) + " " +
-		sprintName(rr.signature)
+		toBase64(rr.signature)
 }
 
 func (rr *Key) String() string {
@@ -38,14 +38,15 @@ func (rr *Key) String() string {
 	for _, rdata := range rr.rdata {
 		b.WriteString(rdata.String())
 	}
-	return strconv.Itoa(int(rr.length)) + " " + b.String()
+	return strconv.Itoa(int(rr.numRdatas)) + " " + b.String()
 }
 
 func (rr *DNSKEY_Rdata) String() string {
-	return strconv.Itoa(int(rr.flags)) + " " +
+	return strconv.Itoa(int(rr.length)) + " " +
+		strconv.Itoa(int(rr.flags)) + " " +
 		strconv.Itoa(int(rr.protocol)) + " " +
 		strconv.Itoa(int(rr.algorithm)) + " " +
-		sprintName(rr.public_key)
+		toBase64(rr.public_key)
 }
 
 func (rr *Entering) String() string {
@@ -62,11 +63,12 @@ func (rr *Entering) String() string {
 }
 
 func (rr *SerialDS) String() string {
-	return strconv.Itoa(int(rr.key_tag)) + " " +
+	return strconv.Itoa(int(rr.length)) + " " +
+		strconv.Itoa(int(rr.key_tag)) + " " +
 		strconv.Itoa(int(rr.algorithm)) + " " +
 		strconv.Itoa(int(rr.digest_type)) + " " +
 		strconv.Itoa(int(rr.digest_len)) + " " +
-		sprintName(rr.digest)
+		toBase64(rr.digest)
 }
 
 func (rr *RRType) String() string {

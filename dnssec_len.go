@@ -50,7 +50,8 @@ func (rr *Entering) len(off int, compression map[string]struct{}) int {
 }
 
 func (rr *SerialDS) len(off int, compression map[string]struct{}) int {
-	l := 2 // key_tag
+	l := 2 // length
+	l += 2 // key_tag
 	l += 1 // algorithm
 	l += 1 // digest_type
 	l += 2 // digest_len
@@ -110,7 +111,8 @@ func (rr *RRData) len(off int, compression map[string]struct{}) int {
 }
 
 func (rr *DNSKEY_Rdata) len(off int, compression map[string]struct{}) int {
-	l := 2 // flags
+	l := 2 // length
+	l += 2 // flags
 	l += 1 // protocol
 	l += 1 // algorithm
 	l += len(rr.public_key)

@@ -27,7 +27,7 @@ func (rr *Key) copy() RR {
 	for i, dk := range rr.rdata {
 		dnskeysRdata[i] = *copyDataDNSKEY_Rdata(&dk)
 	}
-	return &Key{rr.length, dnskeysRdata}
+	return &Key{rr.numRdatas, dnskeysRdata}
 }
 
 func (rr *Entering) copy() RR {
@@ -88,6 +88,7 @@ func copyDataDNSKEY_Rdata(rr *DNSKEY_Rdata) *DNSKEY_Rdata {
 	newPubKey := make([]byte, len(rr.public_key))
 	copy(newPubKey, rr.public_key)
 	return &DNSKEY_Rdata{
+		rr.length,
 		rr.flags,
 		rr.protocol,
 		rr.algorithm,
@@ -150,6 +151,7 @@ func copyDataSerialDS(s *SerialDS) *SerialDS {
 	newDigest := make([]byte, len(s.digest))
 	copy(newDigest, s.digest)
 	return &SerialDS{
+		s.length,
 		s.key_tag,
 		s.algorithm,
 		s.digest_type,

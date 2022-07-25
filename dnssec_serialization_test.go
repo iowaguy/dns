@@ -20,7 +20,7 @@ func TestCopyDNSSEC(t *testing.T) {
 		algorithm:  1,
 		public_key: "abc",
 	}
-	key := &Key{length: 1, []DNSKEY_Rdata{*dnskey_rdata}}
+	key := &Key{numRdatas: 1, []DNSKEY_Rdata{*dnskey_rdata}}
 	entry := &Entering{
 		length:          1,
 		zType:           EnteringType,

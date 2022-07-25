@@ -15,7 +15,7 @@ func (rr *DNSSECProof) pack(msg []byte, off int, compression compressionMap, com
 	}
 
 	for _, z := range rr.zones {
-		off, err = packDataZonePair(&z, msg, off)
+		off, err = packDataZonePair(&z, msg, off, compression, compress)
 		if err != nil {
 			return off, err
 		}
@@ -162,7 +162,7 @@ func packDataZonePair(zp *ZonePair, msg []byte, off int, compression compression
 }
 
 func packDataKey(key *Key, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(key.length, msg, off)
+	off, err = packUint16(key.numRdatas, msg, off)
 	if err != nil {
 		return off, err
 	}
@@ -178,6 +178,10 @@ func packDataKey(key *Key, msg []byte, off int, compression compressionMap, comp
 }
 
 func packDataDNSKEY_Rdata(dk *DNSKEY_Rdata, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
+	off, err = packUint16(dk.length, msg, off)
+	if err != nil {
+		return off, err
+	}
 	off, err = packUint16(dk.flags, msg, off)
 	if err != nil {
 		return off, err
@@ -235,6 +239,10 @@ func packDataEntering(entry *Entering, msg []byte, off int, compression compress
 }
 
 func packDataSerialDS(ds *SerialDS, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
+	off, err = packUint16(ds.length, msg, off)
+	if err != nil {
+		return off, err
+	}
 	off, err = packUint16(ds.key_tag, msg, off)
 	if err != nil {
 		return off, err
