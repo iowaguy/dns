@@ -6,8 +6,9 @@ import (
 
 func mockDNSSECProof() *DNSSECProof {
 	sig := &Signature{
-		length:    1,
+		length:    21,
 		algorithm: 1,
+		labels:    1,
 		ttl:       1,
 		expires:   1,
 		begins:    1,
@@ -15,6 +16,7 @@ func mockDNSSECProof() *DNSSECProof {
 		signature: []byte("123"),
 	}
 	dnskey_rdata := &DNSKEY_Rdata{
+		length:     9,
 		flags:      1,
 		protocol:   1,
 		algorithm:  1,
@@ -22,7 +24,7 @@ func mockDNSSECProof() *DNSSECProof {
 	}
 	key := &Key{1, []DNSKEY_Rdata{*dnskey_rdata}}
 	entry := &Entering{
-		length:          1,
+		length:          37,
 		zType:           EnteringType,
 		entry_key_index: 1,
 		key_sig:         *sig,
@@ -30,7 +32,7 @@ func mockDNSSECProof() *DNSSECProof {
 		keys:            []Key{*key},
 	}
 	exit := &Leaving{
-		length:    1,
+		length:    37,
 		zType:     LeavingType,
 		next_name: "example.com",
 		rrtype:    RRType(TypeTXT),
@@ -52,11 +54,21 @@ func TestCopyDNSSEC(t *testing.T) {
 	}
 }
 
-// func TestPackUnpackDNSSEC(t *testing.T) {
-// 	proof := mockDNSSECProof()
-// 	proof.pack(, off int, compression compressionMap, compress bool)
-// }
-//
+func TestPackUnpackDNSSEC(t *testing.T) {
+	proof := mockDNSSECProof()
+	compression := make(map[string]struct{})
+	packed := make([]byte, proof.len(0, compression))
+	compressionM := make(map[string]uint16)
+	proof.pack(packed, 0, compressionMap{int: compressionM}, false)
+
+	newProof := &DNSSECProof{}
+	newProof.unpack(packed, 0)
+	if proof.String() != newProof.String() {
+		t.Fatalf("copy() failed %s != %s", proof.String(), newProof.String())
+	}
+}
+
+
 func TestLengthDNSSEC(t *testing.T) {
 	proof := mockDNSSECProof()
 	compression := make(map[string]struct{})
