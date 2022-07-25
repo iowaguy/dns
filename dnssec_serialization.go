@@ -12,6 +12,7 @@ type DNSSECProof struct {
 }
 
 type ZoneRecType uint8
+
 const (
 	EnteringType ZoneRecType = 0
 	LeavingType              = 1

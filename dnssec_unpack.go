@@ -11,7 +11,6 @@ func (rr *Signature) unpack(msg []byte, off int) (off1 int, err error) {
 	return off, nil
 }
 
-
 func unpackDataSignature(msg []byte, off int) (sig Signature, off1 int, err error) {
 	sig = Signature{}
 	if off == len(msg) {

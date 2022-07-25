@@ -5,8 +5,6 @@ import (
 	"strconv"
 )
 
-
-
 func (rr *ZonePair) String() string {
 	return rr.entry.String() + " " + rr.exit.String()
 }
