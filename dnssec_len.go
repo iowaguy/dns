@@ -65,7 +65,7 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
 
 	// don't need to add 1, because we are not including the
 	// string "len" field in the serialization.
-	l += len(rr.next_name)
+	l += len([]byte(rr.next_name))
 	l += 2 // rrtype
 	l += rr.rrsig.len(l, compression)
 	return l
@@ -76,7 +76,7 @@ func (rr *LeavingCNAME) len(off int, compression map[string]struct{}) int {
 
 	// don't need to add 1, because we are not including the
 	// string "len" field in the serialization.
-	l += len(rr.next_name)
+	l += len([]byte(rr.next_name))
 	return l
 }
 

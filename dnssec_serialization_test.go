@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestCopyDNSSEC(t *testing.T) {
+func mockDNSSECProof() *DNSSECProof {
 	sig := &Signature{
 		length:    1,
 		algorithm: 1,
@@ -41,12 +41,29 @@ func TestCopyDNSSEC(t *testing.T) {
 		exit:  *exit,
 	}
 
-	rrs := []RR{zp}
+	return &DNSSECProof{0, 1, []ZonePair{*zp}}
+}
 
-	for _, rr := range rrs {
-		rr1 := rr.copy()
-		if rr.String() != rr1.String() {
-			t.Fatalf("copy() failed %s != %s", rr.String(), rr1.String())
-		}
+func TestCopyDNSSEC(t *testing.T) {
+	proof := mockDNSSECProof()
+	proofCopy := proof.copy()
+	if proof.String() != proofCopy.String() {
+		t.Fatalf("copy() failed %s != %s", proof.String(), proofCopy.String())
+	}
+}
+
+// func TestPackUnpackDNSSEC(t *testing.T) {
+// 	proof := mockDNSSECProof()
+// 	proof.pack(, off int, compression compressionMap, compress bool)
+// }
+//
+func TestLengthDNSSEC(t *testing.T) {
+	proof := mockDNSSECProof()
+	compression := make(map[string]struct{})
+
+	l := proof.len(0, compression)
+
+	if l != 77 {
+		t.Fatalf("len() failed %d != 77", l)
 	}
 }
