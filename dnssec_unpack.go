@@ -177,6 +177,8 @@ func (rr *DNSSECProof) unpack(msg []byte, off int) (off1 int, err error) {
 }
 
 func unpackDataSignature(msg []byte, off int) (sig Signature, off1 int, err error) {
+	rdStart := off
+
 	sig = Signature{}
 	if off == len(msg) {
 		return sig, off, nil
@@ -210,7 +212,7 @@ func unpackDataSignature(msg []byte, off int) (sig Signature, off1 int, err erro
 	if err != nil {
 		return sig, off, err
 	}
-	sig.signature, off, err = unpackByteArray(msg, off, int(sig.length)-off)
+	sig.signature, off, err = unpackByteArray(msg, off, int(sig.length)-(off-rdStart))
 	if err != nil {
 		return sig, off, err
 	}
@@ -225,6 +227,8 @@ func unpackByteArray(msg []byte, off int, length int) (b []byte, off1 int, err e
 }
 
 func unpackDataDNSKEY_Rdata(msg []byte, off int) (dnskey_rdata DNSKEY_Rdata, off1 int, err error) {
+	rdStart := off
+
 	dnskey_rdata = DNSKEY_Rdata{}
 	if off == len(msg) {
 		return dnskey_rdata, off, nil
@@ -246,7 +250,7 @@ func unpackDataDNSKEY_Rdata(msg []byte, off int) (dnskey_rdata DNSKEY_Rdata, off
 	if err != nil {
 		return dnskey_rdata, off, err
 	}
-	dnskey_rdata.public_key, off, err = unpackByteArray(msg, off, int(dnskey_rdata.length)-off)
+	dnskey_rdata.public_key, off, err = unpackByteArray(msg, off, int(dnskey_rdata.length)-(off-rdStart))
 	if err != nil {
 		return dnskey_rdata, off, err
 	}
@@ -255,6 +259,8 @@ func unpackDataDNSKEY_Rdata(msg []byte, off int) (dnskey_rdata DNSKEY_Rdata, off
 }
 
 func unpackDataSerialDS(msg []byte, off int) (ds SerialDS, off1 int, err error) {
+	rdStart := off
+
 	ds = SerialDS{}
 	if off == len(msg) {
 		return ds, off, nil
@@ -280,7 +286,7 @@ func unpackDataSerialDS(msg []byte, off int) (ds SerialDS, off1 int, err error) 
 	if err != nil {
 		return ds, off, err
 	}
-	ds.digest, off, err = unpackByteArray(msg, off, int(ds.length)-off)
+	ds.digest, off, err = unpackByteArray(msg, off, int(ds.length)-(off-rdStart))
 	if err != nil {
 		return ds, off, err
 	}
@@ -289,6 +295,8 @@ func unpackDataSerialDS(msg []byte, off int) (ds SerialDS, off1 int, err error) 
 }
 
 func unpackDataRRData(msg []byte, off int) (rd RRData, off1 int, err error) {
+	rdStart := off
+
 	rd = RRData{}
 	if off == len(msg) {
 		return rd, off, nil
@@ -298,7 +306,7 @@ func unpackDataRRData(msg []byte, off int) (rd RRData, off1 int, err error) {
 	if err != nil {
 		return rd, off, err
 	}
-	rd.rrdata, off, err = unpackByteArray(msg, off, int(rd.length)-off)
+	rd.rrdata, off, err = unpackByteArray(msg, off, int(rd.length)-(off-rdStart))
 	if err != nil {
 		return rd, off, err
 	}
