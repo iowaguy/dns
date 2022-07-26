@@ -45,8 +45,8 @@ func mockDNSSECProof() *DNSSECProof {
 
 	return &DNSSECProof{
 		initial_key_tag: 9,
-		num_zones: 12,
-		zones: []ZonePair{*zp},
+		num_zones:       1,
+		zones:           []ZonePair{*zp},
 	}
 }
 
@@ -61,17 +61,22 @@ func TestCopyDNSSEC(t *testing.T) {
 func TestPackUnpackDNSSEC(t *testing.T) {
 	proof := mockDNSSECProof()
 	compression := make(map[string]struct{})
-	packed := make([]byte, proof.len(0, compression))
+	packedBuf := make([]byte, proof.len(0, compression))
 	compressionM := make(map[string]uint16)
-	proof.pack(packed, 0, compressionMap{int: compressionM}, false)
+	off, err := proof.pack(packedBuf, 0, compressionMap{int: compressionM}, false)
+	if err != nil {
+		t.Fatalf("pack() failed at offset %d\n", off)
+	}
 
 	newProof := &DNSSECProof{}
-	newProof.unpack(packed, 0)
+	off, err = newProof.unpack(packedBuf, 0)
+	if err != nil {
+		t.Fatalf("unpack() failed at offset %d\n", off)
+	}
 	if proof.String() != newProof.String() {
-		t.Fatalf("copy() failed %s != %s", proof.String(), newProof.String())
+		t.Fatalf("unpack() failed %s != %s", proof.String(), newProof.String())
 	}
 }
-
 
 func TestLengthDNSSEC(t *testing.T) {
 	proof := mockDNSSECProof()
@@ -79,7 +84,7 @@ func TestLengthDNSSEC(t *testing.T) {
 
 	l := proof.len(0, compression)
 
-	if l != 78 {
-		t.Fatalf("len() failed %d != 78", l)
+	if l != 79 {
+		t.Fatalf("len() failed %d != 79", l)
 	}
 }

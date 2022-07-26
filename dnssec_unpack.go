@@ -167,6 +167,7 @@ func (rr *DNSSECProof) unpack(msg []byte, off int) (off1 int, err error) {
 		return off, err
 	}
 
+	rr.zones = make([]ZonePair, rr.num_zones)
 	for i := 0; i < int(rr.num_zones); i++ {
 		rr.zones[i], off, err = unpackDataZonePair(msg, off)
 		if err != nil {
