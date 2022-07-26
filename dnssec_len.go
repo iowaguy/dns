@@ -63,9 +63,8 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
 	l := 2 // length
 	l += 1 // zType
 
-	// don't need to add 1, because we are not including the
-	// string "len" field in the serialization.
-	l += len([]byte(rr.next_name))
+	// need to add one for the first zone length
+	l += len([]byte(rr.next_name)) + 1
 	l += 2 // rrtype
 	l += rr.rrsig.len(l, compression)
 	return l
@@ -74,9 +73,8 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
 func (rr *LeavingCNAME) len(off int, compression map[string]struct{}) int {
 	l := rr.Leaving.len(0, compression)
 
-	// don't need to add 1, because we are not including the
-	// string "len" field in the serialization.
-	l += len([]byte(rr.next_name))
+	// need to add one for the first zone length
+	l += len([]byte(rr.next_name)) + 1
 	return l
 }
 
