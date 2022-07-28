@@ -14,4 +14,3 @@ func (rr *LeavingDNAME) Header() *RR_Header { return &RR_Header{} }
 func (rr *LeavingDS) Header() *RR_Header    { return &RR_Header{} }
 func (rr *LeavingOther) Header() *RR_Header { return &RR_Header{} }
 func (rr *RRData) Header() *RR_Header       { return &RR_Header{} }
-func (rr *DNSKEY_Rdata) Header() *RR_Header { return &RR_Header{} }

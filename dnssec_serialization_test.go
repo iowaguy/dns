@@ -15,14 +15,13 @@ func mockDNSSECProof() *DNSSECProof {
 		key_tag:   1,
 		signature: []byte("123"),
 	}
-	dnskey_rdata := &DNSKEY_Rdata{
+	key := &Key{
 		length:     9,
 		flags:      1,
 		protocol:   1,
 		algorithm:  1,
 		public_key: []byte("abc"),
 	}
-	key := &Key{1, []DNSKEY_Rdata{*dnskey_rdata}}
 	entry := &Entering{
 		length:          37,
 		zType:           EnteringType,
@@ -84,7 +83,7 @@ func TestLengthDNSSEC(t *testing.T) {
 
 	l := proof.len(0, compression)
 
-	if l != 79 {
-		t.Fatalf("len() failed %d != 79", l)
+	if l != 77 {
+		t.Fatalf("len() failed %d != 77", l)
 	}
 }

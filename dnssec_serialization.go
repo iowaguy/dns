@@ -30,11 +30,6 @@ type Signature struct {
 }
 
 type Key struct {
-	numRdatas uint16
-	rdata     []DNSKEY_Rdata
-}
-
-type DNSKEY_Rdata struct {
 	length     uint16
 	flags      uint16
 	protocol   uint8

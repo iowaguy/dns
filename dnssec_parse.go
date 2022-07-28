@@ -21,10 +21,6 @@ func (rr *Key) parse(c *zlexer, o string) *ParseError {
 	return &ParseError{}
 }
 
-func (rr *DNSKEY_Rdata) parse(c *zlexer, o string) *ParseError {
-	return &ParseError{}
-}
-
 func (rr *Entering) parse(c *zlexer, o string) *ParseError {
 	return &ParseError{}
 }

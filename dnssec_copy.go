@@ -22,14 +22,6 @@ func (rr *Signature) copy() RR {
 	return copySignature(rr)
 }
 
-func (rr *Key) copy() RR {
-	dnskeysRdata := make([]DNSKEY_Rdata, len(rr.rdata))
-	for i, dk := range rr.rdata {
-		dnskeysRdata[i] = *copyDataDNSKEY_Rdata(&dk)
-	}
-	return &Key{rr.numRdatas, dnskeysRdata}
-}
-
 func (rr *Entering) copy() RR {
 	return copyEntering(rr)
 }
@@ -80,14 +72,14 @@ func (rr *RRData) copy() RR {
 	return copyDataRRData(rr)
 }
 
-func (rr *DNSKEY_Rdata) copy() RR {
-	return copyDataDNSKEY_Rdata(rr)
+func (rr *Key) copy() RR {
+	return copyDataKey(rr)
 }
 
-func copyDataDNSKEY_Rdata(rr *DNSKEY_Rdata) *DNSKEY_Rdata {
+func copyDataKey(rr *Key) *Key {
 	newPubKey := make([]byte, len(rr.public_key))
 	copy(newPubKey, rr.public_key)
-	return &DNSKEY_Rdata{
+	return &Key{
 		rr.length,
 		rr.flags,
 		rr.protocol,

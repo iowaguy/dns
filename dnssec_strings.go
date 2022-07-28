@@ -34,14 +34,6 @@ func (rr *Signature) String() string {
 }
 
 func (rr *Key) String() string {
-	var b bytes.Buffer
-	for _, rdata := range rr.rdata {
-		b.WriteString(rdata.String())
-	}
-	return strconv.Itoa(int(rr.numRdatas)) + " " + b.String()
-}
-
-func (rr *DNSKEY_Rdata) String() string {
 	return strconv.Itoa(int(rr.length)) + " " +
 		strconv.Itoa(int(rr.flags)) + " " +
 		strconv.Itoa(int(rr.protocol)) + " " +

@@ -30,9 +30,10 @@ func (rr *Signature) len(off int, compression map[string]struct{}) int {
 
 func (rr *Key) len(off int, compression map[string]struct{}) int {
 	l := 2 // length
-	for _, d := range rr.rdata {
-		l += d.len(l, compression)
-	}
+	l += 2 // flags
+	l += 1 // protocol
+	l += 1 // algorithm
+	l += len(rr.public_key)
 	return l
 }
 
@@ -105,14 +106,5 @@ func (rr *LeavingOther) len(off int, compression map[string]struct{}) int {
 func (rr *RRData) len(off int, compression map[string]struct{}) int {
 	l := 2 // length
 	l += len(rr.rrdata)
-	return l
-}
-
-func (rr *DNSKEY_Rdata) len(off int, compression map[string]struct{}) int {
-	l := 2 // length
-	l += 2 // flags
-	l += 1 // protocol
-	l += 1 // algorithm
-	l += len(rr.public_key)
 	return l
 }

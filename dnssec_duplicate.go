@@ -16,10 +16,6 @@ func (rr *Key) isDuplicate(_r2 RR) bool {
 	return false
 }
 
-func (rr *DNSKEY_Rdata) isDuplicate(_r2 RR) bool {
-	return false
-}
-
 func (rr *Entering) isDuplicate(_r2 RR) bool {
 	return false
 }

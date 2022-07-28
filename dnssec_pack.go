@@ -31,10 +31,6 @@ func (rr *Key) pack(msg []byte, off int, compression compressionMap, compress bo
 	return packDataKey(rr, msg, off, compression, compress)
 }
 
-func (rr *DNSKEY_Rdata) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	return packDataDNSKEY_Rdata(rr, msg, off, compression, compress)
-}
-
 func (rr *Entering) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
 	return packDataEntering(rr, msg, off, compression, compress)
 }
@@ -162,39 +158,23 @@ func packDataZonePair(zp *ZonePair, msg []byte, off int, compression compression
 }
 
 func packDataKey(key *Key, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(key.numRdatas, msg, off)
+	off, err = packUint16(key.length, msg, off)
 	if err != nil {
 		return off, err
 	}
-
-	for _, r := range key.rdata {
-		off, err = packDataDNSKEY_Rdata(&r, msg, off, compression, compress)
-		if err != nil {
-			return off, err
-		}
-	}
-
-	return off, nil
-}
-
-func packDataDNSKEY_Rdata(dk *DNSKEY_Rdata, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(dk.length, msg, off)
+	off, err = packUint16(key.flags, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint16(dk.flags, msg, off)
+	off, err = packUint8(key.protocol, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(dk.protocol, msg, off)
+	off, err = packUint8(key.algorithm, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(dk.algorithm, msg, off)
-	if err != nil {
-		return off, err
-	}
-	off, err = packByteArray(dk.public_key, msg, off, compression, compress)
+	off, err = packByteArray(key.public_key, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}

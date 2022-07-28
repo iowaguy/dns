@@ -11,17 +11,6 @@ func (rr *Signature) unpack(msg []byte, off int) (off1 int, err error) {
 	return off, nil
 }
 
-func (rr *DNSKEY_Rdata) unpack(msg []byte, off int) (off1 int, err error) {
-	rdStart := off
-	_ = rdStart
-
-	*rr, off, err = unpackDataDNSKEY_Rdata(msg, off)
-	if err != nil {
-		return off, err
-	}
-	return off, nil
-}
-
 func (rr *SerialDS) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart
@@ -45,6 +34,7 @@ func (rr *RRData) unpack(msg []byte, off int) (off1 int, err error) {
 }
 
 func (rr *Key) unpack(msg []byte, off int) (off1 int, err error) {
+
 	rdStart := off
 	_ = rdStart
 
@@ -227,36 +217,36 @@ func unpackByteArray(msg []byte, off int, length int) (b []byte, off1 int, err e
 	return b, off + length, nil
 }
 
-func unpackDataDNSKEY_Rdata(msg []byte, off int) (dnskey_rdata DNSKEY_Rdata, off1 int, err error) {
+func unpackDataKey(msg []byte, off int) (key Key, off1 int, err error) {
 	rdStart := off
 
-	dnskey_rdata = DNSKEY_Rdata{}
+	key = Key{}
 	if off == len(msg) {
-		return dnskey_rdata, off, nil
+		return key, off, nil
 	}
 
-	dnskey_rdata.length, off, err = unpackUint16(msg, off)
+	key.length, off, err = unpackUint16(msg, off)
 	if err != nil {
-		return dnskey_rdata, off, err
+		return key, off, err
 	}
-	dnskey_rdata.flags, off, err = unpackUint16(msg, off)
+	key.flags, off, err = unpackUint16(msg, off)
 	if err != nil {
-		return dnskey_rdata, off, err
+		return key, off, err
 	}
-	dnskey_rdata.protocol, off, err = unpackUint8(msg, off)
+	key.protocol, off, err = unpackUint8(msg, off)
 	if err != nil {
-		return dnskey_rdata, off, err
+		return key, off, err
 	}
-	dnskey_rdata.algorithm, off, err = unpackUint8(msg, off)
+	key.algorithm, off, err = unpackUint8(msg, off)
 	if err != nil {
-		return dnskey_rdata, off, err
+		return key, off, err
 	}
-	dnskey_rdata.public_key, off, err = unpackByteArray(msg, off, int(dnskey_rdata.length)-(off-rdStart))
+	key.public_key, off, err = unpackByteArray(msg, off, int(key.length)-(off-rdStart))
 	if err != nil {
-		return dnskey_rdata, off, err
+		return key, off, err
 	}
 
-	return dnskey_rdata, off, nil
+	return key, off, nil
 }
 
 func unpackDataSerialDS(msg []byte, off int) (ds SerialDS, off1 int, err error) {
@@ -313,27 +303,6 @@ func unpackDataRRData(msg []byte, off int) (rd RRData, off1 int, err error) {
 	}
 
 	return rd, off, nil
-}
-
-func unpackDataKey(msg []byte, off int) (key Key, off1 int, err error) {
-	key = Key{}
-	if off == len(msg) {
-		return key, off, nil
-	}
-	key.numRdatas, off, err = unpackUint16(msg, off)
-	if err != nil {
-		return key, off, err
-	}
-
-	key.rdata = make([]DNSKEY_Rdata, key.numRdatas)
-	for i := 0; i < int(key.numRdatas); i++ {
-		key.rdata[i], off, err = unpackDataDNSKEY_Rdata(msg, off)
-		if err != nil {
-			return key, off, err
-		}
-	}
-
-	return key, off, nil
 }
 
 func unpackDataEntering(msg []byte, off int) (entry Entering, off1 int, err error) {
