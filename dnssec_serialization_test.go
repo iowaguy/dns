@@ -6,46 +6,46 @@ import (
 
 func mockDNSSECProof() *DNSSECProof {
 	sig := &Signature{
-		length:    21,
-		algorithm: 1,
-		labels:    1,
-		ttl:       1,
-		expires:   1,
-		begins:    1,
-		key_tag:   1,
-		signature: []byte("123"),
+		Length:    21,
+		Algorithm: 1,
+		Labels:    1,
+		Ttl:       1,
+		Expires:   1,
+		Begins:    1,
+		Key_tag:   1,
+		Signature: []byte("123"),
 	}
 	key := &Key{
-		length:     9,
-		flags:      1,
-		protocol:   1,
-		algorithm:  1,
-		public_key: []byte("abc"),
+		Length:     9,
+		Flags:      1,
+		Protocol:   1,
+		Algorithm:  1,
+		Public_key: []byte("abc"),
 	}
 	entry := &Entering{
-		length:          37,
-		zType:           EnteringType,
-		entry_key_index: 1,
-		key_sig:         *sig,
-		num_keys:        1,
-		keys:            []Key{*key},
+		Length:          37,
+		ZType:           EnteringType,
+		Entry_key_index: 1,
+		Key_sig:         *sig,
+		Num_keys:        1,
+		Keys:            []Key{*key},
 	}
 	exit := &Leaving{
-		length:    38,
-		zType:     LeavingType,
-		next_name: "example.com.",
-		rrtype:    RRType(TypeTXT),
-		rrsig:     *sig,
+		Length:    38,
+		ZType:     LeavingType,
+		Next_name: "example.com.",
+		Rrtype:    RRType(TypeTXT),
+		Rrsig:     *sig,
 	}
 	zp := &ZonePair{
-		entry: *entry,
-		exit:  *exit,
+		Entry: *entry,
+		Exit:  *exit,
 	}
 
 	return &DNSSECProof{
-		initial_key_tag: 9,
-		num_zones:       1,
-		zones:           []ZonePair{*zp},
+		Initial_key_tag: 9,
+		Num_zones:       1,
+		Zones:           []ZonePair{*zp},
 	}
 }
 

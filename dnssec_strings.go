@@ -6,16 +6,16 @@ import (
 )
 
 func (rr *ZonePair) String() string {
-	return rr.entry.String() + " " + rr.exit.String()
+	return rr.Entry.String() + " " + rr.Exit.String()
 }
 
 func (rr *DNSSECProof) String() string {
 	var b bytes.Buffer
-	for _, zone := range rr.zones {
+	for _, zone := range rr.Zones {
 		b.WriteString(zone.String())
 	}
-	return strconv.Itoa(int(rr.initial_key_tag)) + " " +
-		strconv.Itoa(int(rr.num_zones)) + " " + b.String()
+	return strconv.Itoa(int(rr.Initial_key_tag)) + " " +
+		strconv.Itoa(int(rr.Num_zones)) + " " + b.String()
 }
 
 func (rr *ZoneRecType) String() string {
@@ -23,44 +23,44 @@ func (rr *ZoneRecType) String() string {
 }
 
 func (rr *Signature) String() string {
-	return strconv.Itoa(int(rr.length)) + " " +
-		strconv.Itoa(int(rr.algorithm)) + " " +
-		strconv.Itoa(int(rr.labels)) + " " +
-		strconv.Itoa(int(rr.ttl)) + " " +
-		strconv.Itoa(int(rr.expires)) + " " +
-		strconv.Itoa(int(rr.begins)) + " " +
-		strconv.Itoa(int(rr.key_tag)) + " " +
-		toBase64(rr.signature)
+	return strconv.Itoa(int(rr.Length)) + " " +
+		strconv.Itoa(int(rr.Algorithm)) + " " +
+		strconv.Itoa(int(rr.Labels)) + " " +
+		strconv.Itoa(int(rr.Ttl)) + " " +
+		strconv.Itoa(int(rr.Expires)) + " " +
+		strconv.Itoa(int(rr.Begins)) + " " +
+		strconv.Itoa(int(rr.Key_tag)) + " " +
+		toBase64(rr.Signature)
 }
 
 func (rr *Key) String() string {
-	return strconv.Itoa(int(rr.length)) + " " +
-		strconv.Itoa(int(rr.flags)) + " " +
-		strconv.Itoa(int(rr.protocol)) + " " +
-		strconv.Itoa(int(rr.algorithm)) + " " +
-		toBase64(rr.public_key)
+	return strconv.Itoa(int(rr.Length)) + " " +
+		strconv.Itoa(int(rr.Flags)) + " " +
+		strconv.Itoa(int(rr.Protocol)) + " " +
+		strconv.Itoa(int(rr.Algorithm)) + " " +
+		toBase64(rr.Public_key)
 }
 
 func (rr *Entering) String() string {
 	var b bytes.Buffer
-	for _, key := range rr.keys {
+	for _, key := range rr.Keys {
 		b.WriteString(key.String())
 	}
-	return strconv.Itoa(int(rr.length)) + " " +
-		rr.zType.String() + " " +
-		strconv.Itoa(int(rr.entry_key_index)) + " " +
-		rr.key_sig.String() + " " +
-		strconv.Itoa(int(rr.num_keys)) + " " +
+	return strconv.Itoa(int(rr.Length)) + " " +
+		rr.ZType.String() + " " +
+		strconv.Itoa(int(rr.Entry_key_index)) + " " +
+		rr.Key_sig.String() + " " +
+		strconv.Itoa(int(rr.Num_keys)) + " " +
 		b.String()
 }
 
 func (rr *SerialDS) String() string {
-	return strconv.Itoa(int(rr.length)) + " " +
-		strconv.Itoa(int(rr.key_tag)) + " " +
-		strconv.Itoa(int(rr.algorithm)) + " " +
-		strconv.Itoa(int(rr.digest_type)) + " " +
-		strconv.Itoa(int(rr.digest_len)) + " " +
-		toBase64(rr.digest)
+	return strconv.Itoa(int(rr.Length)) + " " +
+		strconv.Itoa(int(rr.Key_tag)) + " " +
+		strconv.Itoa(int(rr.Algorithm)) + " " +
+		strconv.Itoa(int(rr.Digest_type)) + " " +
+		strconv.Itoa(int(rr.Digest_len)) + " " +
+		toBase64(rr.Digest)
 }
 
 func (rr *RRType) String() string {
@@ -68,15 +68,15 @@ func (rr *RRType) String() string {
 }
 
 func (rr *Leaving) String() string {
-	return strconv.Itoa(int(rr.length)) + " " +
-		rr.zType.String() + " " +
-		rr.next_name.String() + " " +
-		rr.rrtype.String() + " " +
-		rr.rrsig.String()
+	return strconv.Itoa(int(rr.Length)) + " " +
+		rr.ZType.String() + " " +
+		rr.Next_name.String() + " " +
+		rr.Rrtype.String() + " " +
+		rr.Rrsig.String()
 }
 
 func (rr *LeavingCNAME) String() string {
-	return rr.Leaving.String() + " " + rr.name.String()
+	return rr.Leaving.String() + " " + rr.Name.String()
 }
 
 func (rr *LeavingDNAME) String() string {
@@ -85,21 +85,21 @@ func (rr *LeavingDNAME) String() string {
 
 func (rr *LeavingDS) String() string {
 	var b bytes.Buffer
-	for _, ds := range rr.ds_records {
+	for _, ds := range rr.Ds_records {
 		b.WriteString(ds.String())
 	}
 	return rr.Leaving.String() + " " +
-		strconv.Itoa(int(rr.num_ds)) + " " + b.String()
+		strconv.Itoa(int(rr.Num_ds)) + " " + b.String()
 }
 
 func (rr *LeavingOther) String() string {
 	var b bytes.Buffer
-	for _, rrdata := range rr.rrs {
+	for _, rrdata := range rr.Rrs {
 		b.WriteString(rrdata.String())
 	}
-	return strconv.Itoa(int(rr.num_rrs)) + " " + b.String()
+	return strconv.Itoa(int(rr.Num_rrs)) + " " + b.String()
 }
 
 func (rr *RRData) String() string {
-	return strconv.Itoa(int(rr.length)) + " " + string(rr.rrdata)
+	return strconv.Itoa(int(rr.Length)) + " " + string(rr.Rrdata)
 }

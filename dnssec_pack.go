@@ -5,16 +5,16 @@ func (rr *ZonePair) pack(msg []byte, off int, compression compressionMap, compre
 }
 
 func (rr *DNSSECProof) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(rr.initial_key_tag, msg, off)
+	off, err = packUint16(rr.Initial_key_tag, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(rr.num_zones, msg, off)
+	off, err = packUint8(rr.Num_zones, msg, off)
 	if err != nil {
 		return off, err
 	}
 
-	for _, z := range rr.zones {
+	for _, z := range rr.Zones {
 		off, err = packDataZonePair(&z, msg, off, compression, compress)
 		if err != nil {
 			return off, err
@@ -56,11 +56,11 @@ func (rr *LeavingDS) pack(msg []byte, off int, compression compressionMap, compr
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(rr.num_ds, msg, off)
+	off, err = packUint8(rr.Num_ds, msg, off)
 	if err != nil {
 		return off, err
 	}
-	for _, ds := range rr.ds_records {
+	for _, ds := range rr.Ds_records {
 		off, err = packDataSerialDS(&ds, msg, off, compression, compress)
 		if err != nil {
 			return off, err
@@ -75,11 +75,11 @@ func (rr *LeavingOther) pack(msg []byte, off int, compression compressionMap, co
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(rr.num_rrs, msg, off)
+	off, err = packUint8(rr.Num_rrs, msg, off)
 	if err != nil {
 		return off, err
 	}
-	for _, r := range rr.rrs {
+	for _, r := range rr.Rrs {
 		off, err = packDataRRData(&r, msg, off, compression, compress)
 		if err != nil {
 			return off, err
@@ -94,11 +94,11 @@ func (rr *RRData) pack(msg []byte, off int, compression compressionMap, compress
 }
 
 func packDataRRData(rrd *RRData, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(rrd.length, msg, off)
+	off, err = packUint16(rrd.Length, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packByteArray(rrd.rrdata, msg, off, compression, compress)
+	off, err = packByteArray(rrd.Rrdata, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
@@ -107,35 +107,35 @@ func packDataRRData(rrd *RRData, msg []byte, off int, compression compressionMap
 }
 
 func packDataSignature(sig *Signature, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(sig.length, msg, off)
+	off, err = packUint16(sig.Length, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(sig.algorithm, msg, off)
+	off, err = packUint8(sig.Algorithm, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(sig.labels, msg, off)
+	off, err = packUint8(sig.Labels, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint32(sig.ttl, msg, off)
+	off, err = packUint32(sig.Ttl, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint32(sig.expires, msg, off)
+	off, err = packUint32(sig.Expires, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint32(sig.begins, msg, off)
+	off, err = packUint32(sig.Begins, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint16(sig.key_tag, msg, off)
+	off, err = packUint16(sig.Key_tag, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packByteArray(sig.signature, msg, off, compression, compress)
+	off, err = packByteArray(sig.Signature, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
@@ -144,12 +144,12 @@ func packDataSignature(sig *Signature, msg []byte, off int, compression compress
 }
 
 func packDataZonePair(zp *ZonePair, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packDataEntering(&zp.entry, msg, off, compression, compress)
+	off, err = packDataEntering(&zp.Entry, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
 
-	off, err = packDataLeaving(&zp.exit, msg, off, compression, compress)
+	off, err = packDataLeaving(&zp.Exit, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
@@ -158,23 +158,23 @@ func packDataZonePair(zp *ZonePair, msg []byte, off int, compression compression
 }
 
 func packDataKey(key *Key, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(key.length, msg, off)
+	off, err = packUint16(key.Length, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint16(key.flags, msg, off)
+	off, err = packUint16(key.Flags, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(key.protocol, msg, off)
+	off, err = packUint8(key.Protocol, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(key.algorithm, msg, off)
+	off, err = packUint8(key.Algorithm, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packByteArray(key.public_key, msg, off, compression, compress)
+	off, err = packByteArray(key.Public_key, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
@@ -188,27 +188,27 @@ func packByteArray(b []byte, msg []byte, off int, compression compressionMap, co
 }
 
 func packDataEntering(entry *Entering, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(entry.length, msg, off)
+	off, err = packUint16(entry.Length, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(uint8(entry.zType), msg, off)
+	off, err = packUint8(uint8(entry.ZType), msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(entry.entry_key_index, msg, off)
+	off, err = packUint8(entry.Entry_key_index, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packDataSignature(&entry.key_sig, msg, off, compression, compress)
+	off, err = packDataSignature(&entry.Key_sig, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(entry.num_keys, msg, off)
+	off, err = packUint8(entry.Num_keys, msg, off)
 	if err != nil {
 		return off, err
 	}
-	for _, k := range entry.keys {
+	for _, k := range entry.Keys {
 		off, err = packDataKey(&k, msg, off, compression, compress)
 		if err != nil {
 			return off, err
@@ -219,27 +219,27 @@ func packDataEntering(entry *Entering, msg []byte, off int, compression compress
 }
 
 func packDataSerialDS(ds *SerialDS, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(ds.length, msg, off)
+	off, err = packUint16(ds.Length, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint16(ds.key_tag, msg, off)
+	off, err = packUint16(ds.Key_tag, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(ds.algorithm, msg, off)
+	off, err = packUint8(ds.Algorithm, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(ds.digest_type, msg, off)
+	off, err = packUint8(ds.Digest_type, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint16(ds.digest_len, msg, off)
+	off, err = packUint16(ds.Digest_len, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packByteArray(ds.digest, msg, off, compression, compress)
+	off, err = packByteArray(ds.Digest, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
@@ -248,23 +248,23 @@ func packDataSerialDS(ds *SerialDS, msg []byte, off int, compression compression
 }
 
 func packDataLeaving(l *Leaving, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(l.length, msg, off)
+	off, err = packUint16(l.Length, msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint8(uint8(l.zType), msg, off)
+	off, err = packUint8(uint8(l.ZType), msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packDomainName(string(l.next_name), msg, off, compression, compress)
+	off, err = packDomainName(string(l.Next_name), msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
-	off, err = packUint16(uint16(l.rrtype), msg, off)
+	off, err = packUint16(uint16(l.Rrtype), msg, off)
 	if err != nil {
 		return off, err
 	}
-	off, err = packDataSignature(&l.rrsig, msg, off, compression, compress)
+	off, err = packDataSignature(&l.Rrsig, msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}
@@ -277,7 +277,7 @@ func packDataLeavingCNAME(l *LeavingCNAME, msg []byte, off int, compression comp
 	if err != nil {
 		return off, err
 	}
-	off, err = packDomainName(string(l.name), msg, off, compression, compress)
+	off, err = packDomainName(string(l.Name), msg, off, compression, compress)
 	if err != nil {
 		return off, err
 	}

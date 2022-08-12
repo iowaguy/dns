@@ -7,13 +7,13 @@ func (rr *ZonePair) copy() RR {
 }
 
 func (rr *DNSSECProof) copy() RR {
-	zonePairs := make([]ZonePair, len(rr.zones))
-	for i, z := range rr.zones {
+	zonePairs := make([]ZonePair, len(rr.Zones))
+	for i, z := range rr.Zones {
 		zonePairs[i] = *copyZonePair(&z)
 	}
 	return &DNSSECProof{
-		rr.initial_key_tag,
-		rr.num_zones,
+		rr.Initial_key_tag,
+		rr.Num_zones,
 		zonePairs,
 	}
 }
@@ -45,25 +45,25 @@ func (rr *LeavingDNAME) copy() RR {
 }
 
 func (rr *LeavingDS) copy() RR {
-	dsRecords := make([]SerialDS, len(rr.ds_records))
-	for i, ds := range rr.ds_records {
+	dsRecords := make([]SerialDS, len(rr.Ds_records))
+	for i, ds := range rr.Ds_records {
 		dsRecords[i] = *copyDataSerialDS(&ds)
 	}
 	return &LeavingDS{
 		*copyLeaving(&rr.Leaving),
-		rr.num_ds,
+		rr.Num_ds,
 		dsRecords,
 	}
 }
 
 func (rr *LeavingOther) copy() RR {
-	rrs := make([]RRData, len(rr.rrs))
-	for i, r := range rr.rrs {
+	rrs := make([]RRData, len(rr.Rrs))
+	for i, r := range rr.Rrs {
 		rrs[i] = *copyDataRRData(&r)
 	}
 	return &LeavingOther{
 		*copyLeaving(&rr.Leaving),
-		rr.num_rrs,
+		rr.Num_rrs,
 		rrs,
 	}
 }
@@ -77,83 +77,83 @@ func (rr *Key) copy() RR {
 }
 
 func copyDataKey(rr *Key) *Key {
-	newPubKey := make([]byte, len(rr.public_key))
-	copy(newPubKey, rr.public_key)
+	newPubKey := make([]byte, len(rr.Public_key))
+	copy(newPubKey, rr.Public_key)
 	return &Key{
-		rr.length,
-		rr.flags,
-		rr.protocol,
-		rr.algorithm,
+		rr.Length,
+		rr.Flags,
+		rr.Protocol,
+		rr.Algorithm,
 		newPubKey,
 	}
 }
 
 func copyEntering(entry *Entering) *Entering {
-	newKeys := entry.keys
+	newKeys := entry.Keys
 	return &Entering{
-		entry.length,
-		entry.zType,
-		entry.entry_key_index,
-		*copySignature(&entry.key_sig),
-		entry.num_keys,
+		entry.Length,
+		entry.ZType,
+		entry.Entry_key_index,
+		*copySignature(&entry.Key_sig),
+		entry.Num_keys,
 		newKeys,
 	}
 }
 
 func copyLeaving(exit *Leaving) *Leaving {
 	return &Leaving{
-		exit.length,
-		exit.zType,
-		Name(strings.Clone(exit.next_name.String())),
-		exit.rrtype,
-		*copySignature(&exit.rrsig),
+		exit.Length,
+		exit.ZType,
+		Name(strings.Clone(exit.Next_name.String())),
+		exit.Rrtype,
+		*copySignature(&exit.Rrsig),
 	}
 }
 
 func copySignature(sig *Signature) *Signature {
-	newSig := make([]byte, len(sig.signature))
-	copy(newSig, sig.signature)
+	newSig := make([]byte, len(sig.Signature))
+	copy(newSig, sig.Signature)
 	return &Signature{
-		sig.length,
-		sig.algorithm,
-		sig.labels,
-		sig.ttl,
-		sig.expires,
-		sig.begins,
-		sig.key_tag,
+		sig.Length,
+		sig.Algorithm,
+		sig.Labels,
+		sig.Ttl,
+		sig.Expires,
+		sig.Begins,
+		sig.Key_tag,
 		newSig,
 	}
 }
 
 func copyZonePair(zp *ZonePair) *ZonePair {
 	return &ZonePair{
-		*copyEntering(&zp.entry),
-		*copyLeaving(&zp.exit),
+		*copyEntering(&zp.Entry),
+		*copyLeaving(&zp.Exit),
 	}
 }
 
 func copyLeavingCNAME(l *LeavingCNAME) *LeavingCNAME {
 	return &LeavingCNAME{
 		*copyLeaving(&l.Leaving),
-		Name(strings.Clone(l.name.String())),
+		Name(strings.Clone(l.Name.String())),
 	}
 }
 
 func copyDataSerialDS(s *SerialDS) *SerialDS {
-	newDigest := make([]byte, len(s.digest))
-	copy(newDigest, s.digest)
+	newDigest := make([]byte, len(s.Digest))
+	copy(newDigest, s.Digest)
 	return &SerialDS{
-		s.length,
-		s.key_tag,
-		s.algorithm,
-		s.digest_type,
-		s.digest_len,
+		s.Length,
+		s.Key_tag,
+		s.Algorithm,
+		s.Digest_type,
+		s.Digest_len,
 		newDigest,
 	}
 }
 
 func copyDataRRData(rrdata *RRData) *RRData {
-	newRRData := make([]byte, len(rrdata.rrdata))
-	copy(newRRData, rrdata.rrdata)
-	return &RRData{rrdata.length, newRRData}
+	newRRData := make([]byte, len(rrdata.Rrdata))
+	copy(newRRData, rrdata.Rrdata)
+	return &RRData{rrdata.Length, newRRData}
 }

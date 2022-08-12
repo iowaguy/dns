@@ -97,13 +97,13 @@ func (rr *LeavingDS) unpack(msg []byte, off int) (off1 int, err error) {
 	if err != nil {
 		return off, err
 	}
-	rr.num_ds, off, err = unpackUint8(msg, off)
+	rr.Num_ds, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return off, err
 	}
 
-	for i := 0; i < int(rr.num_ds); i++ {
-		rr.ds_records[i], off, err = unpackDataSerialDS(msg, off)
+	for i := 0; i < int(rr.Num_ds); i++ {
+		rr.Ds_records[i], off, err = unpackDataSerialDS(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -119,13 +119,13 @@ func (rr *LeavingOther) unpack(msg []byte, off int) (off1 int, err error) {
 	if err != nil {
 		return off, err
 	}
-	rr.num_rrs, off, err = unpackUint8(msg, off)
+	rr.Num_rrs, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return off, err
 	}
 
-	for i := 0; i < int(rr.num_rrs); i++ {
-		rr.rrs[i], off, err = unpackDataRRData(msg, off)
+	for i := 0; i < int(rr.Num_rrs); i++ {
+		rr.Rrs[i], off, err = unpackDataRRData(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -148,18 +148,18 @@ func (rr *DNSSECProof) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart
 
-	rr.initial_key_tag, off, err = unpackUint16(msg, off)
+	rr.Initial_key_tag, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return off, err
 	}
-	rr.num_zones, off, err = unpackUint8(msg, off)
+	rr.Num_zones, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return off, err
 	}
 
-	rr.zones = make([]ZonePair, rr.num_zones)
-	for i := 0; i < int(rr.num_zones); i++ {
-		rr.zones[i], off, err = unpackDataZonePair(msg, off)
+	rr.Zones = make([]ZonePair, rr.Num_zones)
+	for i := 0; i < int(rr.Num_zones); i++ {
+		rr.Zones[i], off, err = unpackDataZonePair(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -175,35 +175,35 @@ func unpackDataSignature(msg []byte, off int) (sig Signature, off1 int, err erro
 		return sig, off, nil
 	}
 
-	sig.length, off, err = unpackUint16(msg, off)
+	sig.Length, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.algorithm, off, err = unpackUint8(msg, off)
+	sig.Algorithm, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.labels, off, err = unpackUint8(msg, off)
+	sig.Labels, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.ttl, off, err = unpackUint32(msg, off)
+	sig.Ttl, off, err = unpackUint32(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.expires, off, err = unpackUint32(msg, off)
+	sig.Expires, off, err = unpackUint32(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.begins, off, err = unpackUint32(msg, off)
+	sig.Begins, off, err = unpackUint32(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.key_tag, off, err = unpackUint16(msg, off)
+	sig.Key_tag, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return sig, off, err
 	}
-	sig.signature, off, err = unpackByteArray(msg, off, int(sig.length)-(off-rdStart))
+	sig.Signature, off, err = unpackByteArray(msg, off, int(sig.Length)-(off-rdStart))
 	if err != nil {
 		return sig, off, err
 	}
@@ -225,23 +225,23 @@ func unpackDataKey(msg []byte, off int) (key Key, off1 int, err error) {
 		return key, off, nil
 	}
 
-	key.length, off, err = unpackUint16(msg, off)
+	key.Length, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return key, off, err
 	}
-	key.flags, off, err = unpackUint16(msg, off)
+	key.Flags, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return key, off, err
 	}
-	key.protocol, off, err = unpackUint8(msg, off)
+	key.Protocol, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return key, off, err
 	}
-	key.algorithm, off, err = unpackUint8(msg, off)
+	key.Algorithm, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return key, off, err
 	}
-	key.public_key, off, err = unpackByteArray(msg, off, int(key.length)-(off-rdStart))
+	key.Public_key, off, err = unpackByteArray(msg, off, int(key.Length)-(off-rdStart))
 	if err != nil {
 		return key, off, err
 	}
@@ -257,27 +257,27 @@ func unpackDataSerialDS(msg []byte, off int) (ds SerialDS, off1 int, err error) 
 		return ds, off, nil
 	}
 
-	ds.length, off, err = unpackUint16(msg, off)
+	ds.Length, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return ds, off, err
 	}
-	ds.key_tag, off, err = unpackUint16(msg, off)
+	ds.Key_tag, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return ds, off, err
 	}
-	ds.algorithm, off, err = unpackUint8(msg, off)
+	ds.Algorithm, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return ds, off, err
 	}
-	ds.digest_type, off, err = unpackUint8(msg, off)
+	ds.Digest_type, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return ds, off, err
 	}
-	ds.digest_len, off, err = unpackUint16(msg, off)
+	ds.Digest_len, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return ds, off, err
 	}
-	ds.digest, off, err = unpackByteArray(msg, off, int(ds.length)-(off-rdStart))
+	ds.Digest, off, err = unpackByteArray(msg, off, int(ds.Length)-(off-rdStart))
 	if err != nil {
 		return ds, off, err
 	}
@@ -293,11 +293,11 @@ func unpackDataRRData(msg []byte, off int) (rd RRData, off1 int, err error) {
 		return rd, off, nil
 	}
 
-	rd.length, off, err = unpackUint16(msg, off)
+	rd.Length, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return rd, off, err
 	}
-	rd.rrdata, off, err = unpackByteArray(msg, off, int(rd.length)-(off-rdStart))
+	rd.Rrdata, off, err = unpackByteArray(msg, off, int(rd.Length)-(off-rdStart))
 	if err != nil {
 		return rd, off, err
 	}
@@ -310,7 +310,7 @@ func unpackDataEntering(msg []byte, off int) (entry Entering, off1 int, err erro
 	if off == len(msg) {
 		return entry, off, nil
 	}
-	entry.length, off, err = unpackUint16(msg, off)
+	entry.Length, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return entry, off, err
 	}
@@ -318,24 +318,24 @@ func unpackDataEntering(msg []byte, off int) (entry Entering, off1 int, err erro
 	if err != nil {
 		return entry, off, err
 	}
-	entry.zType = ZoneRecType(zType)
+	entry.ZType = ZoneRecType(zType)
 
-	entry.entry_key_index, off, err = unpackUint8(msg, off)
+	entry.Entry_key_index, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return entry, off, err
 	}
-	entry.key_sig, off, err = unpackDataSignature(msg, off)
+	entry.Key_sig, off, err = unpackDataSignature(msg, off)
 	if err != nil {
 		return entry, off, err
 	}
-	entry.num_keys, off, err = unpackUint8(msg, off)
+	entry.Num_keys, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return entry, off, err
 	}
 
-	entry.keys = make([]Key, entry.num_keys)
-	for i := 0; i < int(entry.num_keys); i++ {
-		entry.keys[i], off, err = unpackDataKey(msg, off)
+	entry.Keys = make([]Key, entry.Num_keys)
+	for i := 0; i < int(entry.Num_keys); i++ {
+		entry.Keys[i], off, err = unpackDataKey(msg, off)
 		if err != nil {
 			return entry, off, err
 		}
@@ -349,7 +349,7 @@ func unpackDataLeaving(msg []byte, off int) (l Leaving, off1 int, err error) {
 	if off == len(msg) {
 		return l, off, nil
 	}
-	l.length, off, err = unpackUint16(msg, off)
+	l.Length, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return l, off, err
 	}
@@ -357,21 +357,21 @@ func unpackDataLeaving(msg []byte, off int) (l Leaving, off1 int, err error) {
 	if err != nil {
 		return l, off, err
 	}
-	l.zType = ZoneRecType(zType)
+	l.ZType = ZoneRecType(zType)
 
 	next_name, off, err := UnpackDomainName(msg, off)
 	if err != nil {
 		return l, off, err
 	}
-	l.next_name = Name(next_name)
+	l.Next_name = Name(next_name)
 
 	rrtype, off, err := unpackUint16(msg, off)
 	if err != nil {
 		return l, off, err
 	}
-	l.rrtype = RRType(rrtype)
+	l.Rrtype = RRType(rrtype)
 
-	l.rrsig, off, err = unpackDataSignature(msg, off)
+	l.Rrsig, off, err = unpackDataSignature(msg, off)
 	if err != nil {
 		return l, off, err
 	}
@@ -392,7 +392,7 @@ func unpackDataLeavingCNAME(msg []byte, off int) (l LeavingCNAME, off1 int, err 
 	if err != nil {
 		return l, off, err
 	}
-	l.name = Name(name)
+	l.Name = Name(name)
 
 	return l, off, nil
 }
@@ -403,11 +403,11 @@ func unpackDataZonePair(msg []byte, off int) (zp ZonePair, off1 int, err error) 
 		return zp, off, nil
 	}
 
-	zp.entry, off, err = unpackDataEntering(msg, off)
+	zp.Entry, off, err = unpackDataEntering(msg, off)
 	if err != nil {
 		return zp, off, err
 	}
-	zp.exit, off, err = unpackDataLeaving(msg, off)
+	zp.Exit, off, err = unpackDataLeaving(msg, off)
 	if err != nil {
 		return zp, off, err
 	}
