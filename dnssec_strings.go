@@ -68,36 +68,34 @@ func (rr *RRType) String() string {
 }
 
 func (rr *Leaving) String() string {
-	return strconv.Itoa(int(rr.Length)) + " " +
+	s := strconv.Itoa(int(rr.Length)) + " " +
 		rr.ZType.String() + " " +
 		rr.Next_name.String() + " " +
 		rr.Rrtype.String() + " " +
-		rr.Rrsig.String()
-}
+		rr.Rrsig.String() + " " +
+		strconv.Itoa(int(rr.LeavingType))
 
-func (rr *LeavingCNAME) String() string {
-	return rr.Leaving.String() + " " + rr.Name.String()
-}
-
-func (rr *LeavingDNAME) String() string {
-	return rr.LeavingCNAME.String()
-}
-
-func (rr *LeavingDS) String() string {
-	var b bytes.Buffer
-	for _, ds := range rr.Ds_records {
-		b.WriteString(ds.String())
+	switch rr.LeavingType {
+	case LeavingCNAMEType:
+		fallthrough
+	case LeavingDNAMEType:
+		return s + " " + rr.Name.String()
+	case LeavingDSType:
+		var b bytes.Buffer
+		for _, ds := range rr.Ds_records {
+			b.WriteString(ds.String())
+		}
+		return s + " " + strconv.Itoa(int(rr.Num_ds)) +
+			" " + b.String()
+	case LeavingOtherType:
+		var b bytes.Buffer
+		for _, rrdata := range rr.Rrs {
+			b.WriteString(rrdata.String())
+		}
+		return s + strconv.Itoa(int(rr.Num_rrs)) + " " + b.String()
 	}
-	return rr.Leaving.String() + " " +
-		strconv.Itoa(int(rr.Num_ds)) + " " + b.String()
-}
 
-func (rr *LeavingOther) String() string {
-	var b bytes.Buffer
-	for _, rrdata := range rr.Rrs {
-		b.WriteString(rrdata.String())
-	}
-	return strconv.Itoa(int(rr.Num_rrs)) + " " + b.String()
+	return s
 }
 
 func (rr *RRData) String() string {

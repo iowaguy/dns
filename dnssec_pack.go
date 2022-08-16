@@ -43,52 +43,6 @@ func (rr *Leaving) pack(msg []byte, off int, compression compressionMap, compres
 	return packDataLeaving(rr, msg, off, compression, compress)
 }
 
-func (rr *LeavingCNAME) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	return packDataLeavingCNAME(rr, msg, off, compression, compress)
-}
-
-func (rr *LeavingDNAME) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	return packDataLeavingCNAME(&rr.LeavingCNAME, msg, off, compression, compress)
-}
-
-func (rr *LeavingDS) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packDataLeaving(&rr.Leaving, msg, off, compression, compress)
-	if err != nil {
-		return off, err
-	}
-	off, err = packUint8(rr.Num_ds, msg, off)
-	if err != nil {
-		return off, err
-	}
-	for _, ds := range rr.Ds_records {
-		off, err = packDataSerialDS(&ds, msg, off, compression, compress)
-		if err != nil {
-			return off, err
-		}
-	}
-
-	return off, nil
-}
-
-func (rr *LeavingOther) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packDataLeaving(&rr.Leaving, msg, off, compression, compress)
-	if err != nil {
-		return off, err
-	}
-	off, err = packUint8(rr.Num_rrs, msg, off)
-	if err != nil {
-		return off, err
-	}
-	for _, r := range rr.Rrs {
-		off, err = packDataRRData(&r, msg, off, compression, compress)
-		if err != nil {
-			return off, err
-		}
-	}
-
-	return off, nil
-}
-
 func (rr *RRData) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
 	return packDataRRData(rr, msg, off, compression, compress)
 }
@@ -268,15 +222,44 @@ func packDataLeaving(l *Leaving, msg []byte, off int, compression compressionMap
 	if err != nil {
 		return off, err
 	}
+	off, err = packUint8(uint8(l.LeavingType), msg, off)
+	if err != nil {
+		return off, err
+	}
+
+	switch l.LeavingType {
+	case LeavingCNAMEType:
+		fallthrough
+	case LeavingDNAMEType:
+		off, err = packDataLeavingCNAME(l, msg, off, compression, compress)
+	case LeavingDSType:
+		off, err = packUint8(l.Num_ds, msg, off)
+		if err != nil {
+			return off, err
+		}
+		for _, ds := range l.Ds_records {
+			off, err = packDataSerialDS(&ds, msg, off, compression, compress)
+			if err != nil {
+				return off, err
+			}
+		}
+	case LeavingOtherType:
+		off, err = packUint8(l.Num_rrs, msg, off)
+		if err != nil {
+			return off, err
+		}
+		for _, r := range l.Rrs {
+			off, err = packDataRRData(&r, msg, off, compression, compress)
+			if err != nil {
+				return off, err
+			}
+		}
+	}
 
 	return off, nil
 }
 
-func packDataLeavingCNAME(l *LeavingCNAME, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packDataLeaving(&l.Leaving, msg, off, compression, compress)
-	if err != nil {
-		return off, err
-	}
+func packDataLeavingCNAME(l *Leaving, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
 	off, err = packDomainName(string(l.Name), msg, off, compression, compress)
 	if err != nil {
 		return off, err

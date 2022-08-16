@@ -68,37 +68,26 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
 	l += len([]byte(rr.Next_name)) + 1
 	l += 2 // rrtype
 	l += rr.Rrsig.len(l, compression)
-	return l
-}
+	l += 1 // leavingtype
 
-func (rr *LeavingCNAME) len(off int, compression map[string]struct{}) int {
-	l := rr.Leaving.len(0, compression)
+	switch rr.LeavingType {
+	case LeavingCNAMEType:
+		fallthrough
+	case LeavingDNAMEType:
+		// need to add one for the first zone length
+		l += len([]byte(rr.Name)) + 1
+	case LeavingDSType:
+		l += 1 // num_ds
 
-	// need to add one for the first zone length
-	l += len([]byte(rr.Next_name)) + 1
-	return l
-}
+		for _, ds := range rr.Ds_records {
+			l += ds.len(0, compression)
+		}
+	case LeavingOtherType:
+		l += 1 // num_rrs
 
-func (rr *LeavingDNAME) len(off int, compression map[string]struct{}) int {
-	return rr.LeavingCNAME.len(0, compression)
-}
-
-func (rr *LeavingDS) len(off int, compression map[string]struct{}) int {
-	l := rr.Leaving.len(0, compression)
-	l += 1 // num_ds
-
-	for _, ds := range rr.Ds_records {
-		l += ds.len(0, compression)
-	}
-	return l
-}
-
-func (rr *LeavingOther) len(off int, compression map[string]struct{}) int {
-	l := rr.Leaving.len(0, compression)
-	l += 1 // num_rrs
-
-	for _, r := range rr.Rrs {
-		l += r.len(0, compression)
+		for _, r := range rr.Rrs {
+			l += r.len(0, compression)
+		}
 	}
 	return l
 }

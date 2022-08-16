@@ -33,22 +33,6 @@ func (rr *Leaving) parse(c *zlexer, o string) *ParseError {
 	return &ParseError{}
 }
 
-func (rr *LeavingCNAME) parse(c *zlexer, o string) *ParseError {
-	return &ParseError{}
-}
-
-func (rr *LeavingDNAME) parse(c *zlexer, o string) *ParseError {
-	return &ParseError{}
-}
-
-func (rr *LeavingDS) parse(c *zlexer, o string) *ParseError {
-	return &ParseError{}
-}
-
-func (rr *LeavingOther) parse(c *zlexer, o string) *ParseError {
-	return &ParseError{}
-}
-
 func (rr *RRData) parse(c *zlexer, o string) *ParseError {
 	return &ParseError{}
 }

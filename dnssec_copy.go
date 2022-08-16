@@ -34,40 +34,6 @@ func (rr *Leaving) copy() RR {
 	return copyLeaving(rr)
 }
 
-func (rr *LeavingCNAME) copy() RR {
-	return copyLeavingCNAME(rr)
-}
-
-func (rr *LeavingDNAME) copy() RR {
-	return &LeavingDNAME{
-		*copyLeavingCNAME(&rr.LeavingCNAME),
-	}
-}
-
-func (rr *LeavingDS) copy() RR {
-	dsRecords := make([]SerialDS, len(rr.Ds_records))
-	for i, ds := range rr.Ds_records {
-		dsRecords[i] = *copyDataSerialDS(&ds)
-	}
-	return &LeavingDS{
-		*copyLeaving(&rr.Leaving),
-		rr.Num_ds,
-		dsRecords,
-	}
-}
-
-func (rr *LeavingOther) copy() RR {
-	rrs := make([]RRData, len(rr.Rrs))
-	for i, r := range rr.Rrs {
-		rrs[i] = *copyDataRRData(&r)
-	}
-	return &LeavingOther{
-		*copyLeaving(&rr.Leaving),
-		rr.Num_rrs,
-		rrs,
-	}
-}
-
 func (rr *RRData) copy() RR {
 	return copyDataRRData(rr)
 }
@@ -101,12 +67,28 @@ func copyEntering(entry *Entering) *Entering {
 }
 
 func copyLeaving(exit *Leaving) *Leaving {
+	dsRecords := make([]SerialDS, len(exit.Ds_records))
+	for i, ds := range exit.Ds_records {
+		dsRecords[i] = *copyDataSerialDS(&ds)
+	}
+
+	rrs := make([]RRData, len(exit.Rrs))
+	for i, r := range exit.Rrs {
+		rrs[i] = *copyDataRRData(&r)
+	}
+
 	return &Leaving{
-		exit.Length,
-		exit.ZType,
-		Name(strings.Clone(exit.Next_name.String())),
-		exit.Rrtype,
-		*copySignature(&exit.Rrsig),
+		Length:      exit.Length,
+		ZType:       exit.ZType,
+		Next_name:   Name(strings.Clone(exit.Next_name.String())),
+		Rrtype:      exit.Rrtype,
+		Rrsig:       *copySignature(&exit.Rrsig),
+		LeavingType: exit.LeavingType,
+		Name:        exit.Name,
+		Num_ds:      exit.Num_ds,
+		Ds_records:  dsRecords,
+		Num_rrs:     exit.Num_rrs,
+		Rrs:         rrs,
 	}
 }
 
@@ -129,13 +111,6 @@ func copyZonePair(zp *ZonePair) *ZonePair {
 	return &ZonePair{
 		*copyEntering(&zp.Entry),
 		*copyLeaving(&zp.Exit),
-	}
-}
-
-func copyLeavingCNAME(l *LeavingCNAME) *LeavingCNAME {
-	return &LeavingCNAME{
-		*copyLeaving(&l.Leaving),
-		Name(strings.Clone(l.Name.String())),
 	}
 }
 

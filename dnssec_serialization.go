@@ -57,31 +57,32 @@ type SerialDS struct {
 
 type RRType uint16
 
+type LeavingRecordType uint8
+
+const (
+	LeavingDSType      LeavingRecordType = 0
+	LeavingCNAMEType                     = 1
+	LeavingDNAMEType                     = 2
+	LeavingOtherType                     = 3
+	LeavingUncommitted                   = 4
+)
+
 type Leaving struct {
-	Length    uint16
-	ZType     ZoneRecType
-	Next_name Name
-	Rrtype    RRType
-	Rrsig     Signature
-}
+	Length      uint16
+	ZType       ZoneRecType
+	Next_name   Name
+	Rrtype      RRType
+	Rrsig       Signature
+	LeavingType LeavingRecordType
 
-type LeavingCNAME struct {
-	Leaving
+	// Used in CNAME and DNAME only
 	Name Name
-}
 
-type LeavingDNAME struct {
-	LeavingCNAME
-}
-
-type LeavingDS struct {
-	Leaving
+	// Used in DS only
 	Num_ds     uint8
 	Ds_records []SerialDS
-}
 
-type LeavingOther struct {
-	Leaving
+	// Used in "other" only
 	Num_rrs uint8
 	Rrs     []RRData
 }

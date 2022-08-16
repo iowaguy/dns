@@ -23,7 +23,7 @@ func mockDNSSECProof() *DNSSECProof {
 		Public_key: []byte("abc"),
 	}
 	entry := &Entering{
-		Length:          37,
+		Length:          35,
 		ZType:           EnteringType,
 		Entry_key_index: 1,
 		Key_sig:         *sig,
@@ -31,11 +31,13 @@ func mockDNSSECProof() *DNSSECProof {
 		Keys:            []Key{*key},
 	}
 	exit := &Leaving{
-		Length:    38,
-		ZType:     LeavingType,
-		Next_name: "example.com.",
-		Rrtype:    RRType(TypeTXT),
-		Rrsig:     *sig,
+		Length:      45,
+		ZType:       LeavingType,
+		Next_name:   "example.com.",
+		Rrtype:      RRType(TypeTXT),
+		Rrsig:       *sig,
+		LeavingType: LeavingCNAMEType,
+		Name:        "com.",
 	}
 	zp := &ZonePair{
 		Entry: *entry,
@@ -83,7 +85,7 @@ func TestLengthDNSSEC(t *testing.T) {
 
 	l := proof.len(0, compression)
 
-	if l != 77 {
-		t.Fatalf("len() failed %d != 77", l)
+	if l != 83 {
+		t.Fatalf("len() failed %d != 83", l)
 	}
 }

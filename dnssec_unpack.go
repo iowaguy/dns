@@ -67,72 +67,6 @@ func (rr *Leaving) unpack(msg []byte, off int) (off1 int, err error) {
 	return off, nil
 }
 
-func (rr *LeavingCNAME) unpack(msg []byte, off int) (off1 int, err error) {
-	rdStart := off
-	_ = rdStart
-
-	*rr, off, err = unpackDataLeavingCNAME(msg, off)
-	if err != nil {
-		return off, err
-	}
-	return off, nil
-}
-
-func (rr *LeavingDNAME) unpack(msg []byte, off int) (off1 int, err error) {
-	rdStart := off
-	_ = rdStart
-
-	(*rr).LeavingCNAME, off, err = unpackDataLeavingCNAME(msg, off)
-	if err != nil {
-		return off, err
-	}
-	return off, nil
-}
-
-func (rr *LeavingDS) unpack(msg []byte, off int) (off1 int, err error) {
-	rdStart := off
-	_ = rdStart
-
-	rr.Leaving, off, err = unpackDataLeaving(msg, off)
-	if err != nil {
-		return off, err
-	}
-	rr.Num_ds, off, err = unpackUint8(msg, off)
-	if err != nil {
-		return off, err
-	}
-
-	for i := 0; i < int(rr.Num_ds); i++ {
-		rr.Ds_records[i], off, err = unpackDataSerialDS(msg, off)
-		if err != nil {
-			return off, err
-		}
-	}
-	return off, nil
-}
-
-func (rr *LeavingOther) unpack(msg []byte, off int) (off1 int, err error) {
-	rdStart := off
-	_ = rdStart
-
-	rr.Leaving, off, err = unpackDataLeaving(msg, off)
-	if err != nil {
-		return off, err
-	}
-	rr.Num_rrs, off, err = unpackUint8(msg, off)
-	if err != nil {
-		return off, err
-	}
-
-	for i := 0; i < int(rr.Num_rrs); i++ {
-		rr.Rrs[i], off, err = unpackDataRRData(msg, off)
-		if err != nil {
-			return off, err
-		}
-	}
-	return off, nil
-}
-
 func (rr *ZonePair) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart
@@ -375,24 +309,46 @@ func unpackDataLeaving(msg []byte, off int) (l Leaving, off1 int, err error) {
 	if err != nil {
 		return l, off, err
 	}
-
-	return l, off, nil
-}
-
-func unpackDataLeavingCNAME(msg []byte, off int) (l LeavingCNAME, off1 int, err error) {
-	l = LeavingCNAME{}
-	if off == len(msg) {
-		return l, off, nil
-	}
-	l.Leaving, off, err = unpackDataLeaving(msg, off)
+	leavingType, off, err := unpackUint8(msg, off)
 	if err != nil {
 		return l, off, err
 	}
-	name, off, err := UnpackDomainName(msg, off)
-	if err != nil {
-		return l, off, err
+	l.LeavingType = LeavingRecordType(leavingType)
+
+	switch l.LeavingType {
+	case LeavingCNAMEType:
+		fallthrough
+	case LeavingDNAMEType:
+		name, off, err := UnpackDomainName(msg, off)
+		if err != nil {
+			return l, off, err
+		}
+		l.Name = Name(name)
+	case LeavingDSType:
+		l.Num_ds, off, err = unpackUint8(msg, off)
+		if err != nil {
+			return l, off, err
+		}
+
+		for i := 0; i < int(l.Num_ds); i++ {
+			l.Ds_records[i], off, err = unpackDataSerialDS(msg, off)
+			if err != nil {
+				return l, off, err
+			}
+		}
+	case LeavingOtherType:
+		l.Num_rrs, off, err = unpackUint8(msg, off)
+		if err != nil {
+			return l, off, err
+		}
+
+		for i := 0; i < int(l.Num_rrs); i++ {
+			l.Rrs[i], off, err = unpackDataRRData(msg, off)
+			if err != nil {
+				return l, off, err
+			}
+		}
 	}
-	l.Name = Name(name)
 
 	return l, off, nil
 }
