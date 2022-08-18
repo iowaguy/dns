@@ -12,9 +12,10 @@ func (rr *DNSSECProof) copy() RR {
 		zonePairs[i] = *copyZonePair(&z)
 	}
 	return &DNSSECProof{
-		rr.Initial_key_tag,
-		rr.Num_zones,
-		zonePairs,
+		Hdr:             *rr.Header(),
+		Initial_key_tag: rr.Initial_key_tag,
+		Num_zones:       rr.Num_zones,
+		Zones:           zonePairs,
 	}
 }
 

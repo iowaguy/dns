@@ -7,7 +7,8 @@ func (rr *ZonePair) len(off int, compression map[string]struct{}) int {
 }
 
 func (rr *DNSSECProof) len(off int, compression map[string]struct{}) int {
-	l := 2 // initial_key_tag
+	l := rr.Hdr.len(off, compression)
+	l += 2 // initial_key_tag
 	l += 1 // num_zones
 
 	for _, z := range rr.Zones {

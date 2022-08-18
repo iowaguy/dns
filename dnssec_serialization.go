@@ -6,6 +6,7 @@ type ZonePair struct {
 }
 
 type DNSSECProof struct {
+	Hdr             RR_Header
 	Initial_key_tag uint16
 	Num_zones       uint8
 	Zones           []ZonePair

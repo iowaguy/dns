@@ -1,7 +1,7 @@
 package dns
 
 func (rr *ZonePair) Header() *RR_Header    { return &RR_Header{} }
-func (rr *DNSSECProof) Header() *RR_Header { return &RR_Header{} }
+func (rr *DNSSECProof) Header() *RR_Header { return &rr.Hdr }
 func (rr *ZoneRecType) Header() *RR_Header { return &RR_Header{} }
 func (rr *Signature) Header() *RR_Header   { return &RR_Header{} }
 func (rr *Key) Header() *RR_Header         { return &RR_Header{} }
