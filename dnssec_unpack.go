@@ -22,19 +22,7 @@ func (rr *SerialDS) unpack(msg []byte, off int) (off1 int, err error) {
 	return off, nil
 }
 
-func (rr *RRData) unpack(msg []byte, off int) (off1 int, err error) {
-	rdStart := off
-	_ = rdStart
-
-	*rr, off, err = unpackDataRRData(msg, off)
-	if err != nil {
-		return off, err
-	}
-	return off, nil
-}
-
 func (rr *Key) unpack(msg []byte, off int) (off1 int, err error) {
-
 	rdStart := off
 	_ = rdStart
 
@@ -219,26 +207,6 @@ func unpackDataSerialDS(msg []byte, off int) (ds SerialDS, off1 int, err error) 
 	return ds, off, nil
 }
 
-func unpackDataRRData(msg []byte, off int) (rd RRData, off1 int, err error) {
-	rdStart := off
-
-	rd = RRData{}
-	if off == len(msg) {
-		return rd, off, nil
-	}
-
-	rd.Length, off, err = unpackUint16(msg, off)
-	if err != nil {
-		return rd, off, err
-	}
-	rd.Rrdata, off, err = unpackByteArray(msg, off, int(rd.Length)-(off-rdStart))
-	if err != nil {
-		return rd, off, err
-	}
-
-	return rd, off, nil
-}
-
 func unpackDataEntering(msg []byte, off int) (entry Entering, off1 int, err error) {
 	entry = Entering{}
 	if off == len(msg) {
@@ -343,7 +311,7 @@ func unpackDataLeaving(msg []byte, off int) (l Leaving, off1 int, err error) {
 		}
 
 		for i := 0; i < int(l.Num_rrs); i++ {
-			l.Rrs[i], off, err = unpackDataRRData(msg, off)
+			l.Rrs[i], off, err = UnpackRR(msg, off)
 			if err != nil {
 				return l, off, err
 			}

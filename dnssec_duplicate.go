@@ -27,7 +27,3 @@ func (rr *SerialDS) isDuplicate(_r2 RR) bool {
 func (rr *Leaving) isDuplicate(_r2 RR) bool {
 	return false
 }
-
-func (rr *RRData) isDuplicate(_r2 RR) bool {
-	return false
-}

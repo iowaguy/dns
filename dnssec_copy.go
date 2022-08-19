@@ -35,10 +35,6 @@ func (rr *Leaving) copy() RR {
 	return copyLeaving(rr)
 }
 
-func (rr *RRData) copy() RR {
-	return copyDataRRData(rr)
-}
-
 func (rr *Key) copy() RR {
 	return copyDataKey(rr)
 }
@@ -73,9 +69,9 @@ func copyLeaving(exit *Leaving) *Leaving {
 		dsRecords[i] = *copyDataSerialDS(&ds)
 	}
 
-	rrs := make([]RRData, len(exit.Rrs))
+	rrs := make([]RR, len(exit.Rrs))
 	for i, r := range exit.Rrs {
-		rrs[i] = *copyDataRRData(&r)
+		rrs[i] = r.copy()
 	}
 
 	return &Leaving{
@@ -126,10 +122,4 @@ func copyDataSerialDS(s *SerialDS) *SerialDS {
 		s.Digest_len,
 		newDigest,
 	}
-}
-
-func copyDataRRData(rrdata *RRData) *RRData {
-	newRRData := make([]byte, len(rrdata.Rrdata))
-	copy(newRRData, rrdata.Rrdata)
-	return &RRData{rrdata.Length, newRRData}
 }

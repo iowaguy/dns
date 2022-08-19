@@ -43,23 +43,6 @@ func (rr *Leaving) pack(msg []byte, off int, compression compressionMap, compres
 	return packDataLeaving(rr, msg, off, compression, compress)
 }
 
-func (rr *RRData) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	return packDataRRData(rr, msg, off, compression, compress)
-}
-
-func packDataRRData(rrd *RRData, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
-	off, err = packUint16(rrd.Length, msg, off)
-	if err != nil {
-		return off, err
-	}
-	off, err = packByteArray(rrd.Rrdata, msg, off, compression, compress)
-	if err != nil {
-		return off, err
-	}
-
-	return off, nil
-}
-
 func packDataSignature(sig *Signature, msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
 	off, err = packUint16(sig.Length, msg, off)
 	if err != nil {
@@ -249,7 +232,7 @@ func packDataLeaving(l *Leaving, msg []byte, off int, compression compressionMap
 			return off, err
 		}
 		for _, r := range l.Rrs {
-			off, err = packDataRRData(&r, msg, off, compression, compress)
+			off, err = PackRR(r, msg, off, compression.ext, compress)
 			if err != nil {
 				return off, err
 			}

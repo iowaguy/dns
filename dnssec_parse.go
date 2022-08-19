@@ -32,7 +32,3 @@ func (rr *SerialDS) parse(c *zlexer, o string) *ParseError {
 func (rr *Leaving) parse(c *zlexer, o string) *ParseError {
 	return &ParseError{}
 }
-
-func (rr *RRData) parse(c *zlexer, o string) *ParseError {
-	return &ParseError{}
-}

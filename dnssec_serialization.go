@@ -85,10 +85,5 @@ type Leaving struct {
 
 	// Used in "other" only
 	Num_rrs uint8
-	Rrs     []RRData
-}
-
-type RRData struct {
-	Length uint16
-	Rrdata []byte
+	Rrs     []RR
 }

@@ -97,7 +97,3 @@ func (rr *Leaving) String() string {
 
 	return s
 }
-
-func (rr *RRData) String() string {
-	return strconv.Itoa(int(rr.Length)) + " " + string(rr.Rrdata)
-}

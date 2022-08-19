@@ -92,9 +92,3 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
 	}
 	return l
 }
-
-func (rr *RRData) len(off int, compression map[string]struct{}) int {
-	l := 2 // length
-	l += len(rr.Rrdata)
-	return l
-}
