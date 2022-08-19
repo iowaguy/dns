@@ -61,11 +61,11 @@ type RRType uint16
 type LeavingRecordType uint8
 
 const (
-	LeavingDSType      LeavingRecordType = 0
+	LeavingUncommitted LeavingRecordType = 0
 	LeavingCNAMEType                     = 1
 	LeavingDNAMEType                     = 2
-	LeavingOtherType                     = 3
-	LeavingUncommitted                   = 4
+	LeavingDSType                        = 3
+	LeavingOtherType                     = 4
 )
 
 type Leaving struct {
