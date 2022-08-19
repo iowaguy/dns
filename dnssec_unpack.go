@@ -298,6 +298,7 @@ func unpackDataLeaving(msg []byte, off int) (l Leaving, off1 int, err error) {
 			return l, off, err
 		}
 
+		l.Ds_records = make([]SerialDS, int(l.Num_ds))
 		for i := 0; i < int(l.Num_ds); i++ {
 			l.Ds_records[i], off, err = unpackDataSerialDS(msg, off)
 			if err != nil {
@@ -310,6 +311,7 @@ func unpackDataLeaving(msg []byte, off int) (l Leaving, off1 int, err error) {
 			return l, off, err
 		}
 
+		l.Rrs = make([]RR, int(l.Num_rrs))
 		for i := 0; i < int(l.Num_rrs); i++ {
 			l.Rrs[i], off, err = UnpackRR(msg, off)
 			if err != nil {
