@@ -27,7 +27,7 @@ type Signature struct {
 	Expires    uint32
 	Begins     uint32
 	Key_tag    uint16
-	SignerName string
+	SignerName Name
 	Signature  []byte
 }
 

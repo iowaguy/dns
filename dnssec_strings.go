@@ -30,6 +30,7 @@ func (rr *Signature) String() string {
 		strconv.Itoa(int(rr.Expires)) + " " +
 		strconv.Itoa(int(rr.Begins)) + " " +
 		strconv.Itoa(int(rr.Key_tag)) + " " +
+		rr.SignerName.String() + " " +
 		toBase64(rr.Signature)
 }
 

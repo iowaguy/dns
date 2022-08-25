@@ -25,6 +25,9 @@ func (rr *Signature) len(off int, compression map[string]struct{}) int {
 	l += 4 // expires
 	l += 4 // begins
 	l += 2 // key_tag
+
+	// need to add one for the first zone length
+	l += len([]byte(rr.SignerName)) + 1
 	l += len(rr.Signature)
 	return l
 }
