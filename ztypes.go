@@ -9,17 +9,17 @@ import (
 
 // TypeToRR is a map of constructors for each RR type.
 var TypeToRR = map[uint16]func() RR{
-	TypeA:           func() RR { return new(A) },
-	TypeAAAA:        func() RR { return new(AAAA) },
-	TypeAFSDB:       func() RR { return new(AFSDB) },
-	TypeANY:         func() RR { return new(ANY) },
-	TypeAPL:         func() RR { return new(APL) },
-	TypeAVC:         func() RR { return new(AVC) },
-	TypeCAA:         func() RR { return new(CAA) },
-	TypeCDNSKEY:     func() RR { return new(CDNSKEY) },
-	TypeCDS:         func() RR { return new(CDS) },
-	TypeCERT:        func() RR { return new(CERT) },
-	TypeCNAME:       func() RR { return new(CNAME) },
+	TypeA:       func() RR { return new(A) },
+	TypeAAAA:    func() RR { return new(AAAA) },
+	TypeAFSDB:   func() RR { return new(AFSDB) },
+	TypeANY:     func() RR { return new(ANY) },
+	TypeAPL:     func() RR { return new(APL) },
+	TypeAVC:     func() RR { return new(AVC) },
+	TypeCAA:     func() RR { return new(CAA) },
+	TypeCDNSKEY: func() RR { return new(CDNSKEY) },
+	TypeCDS:     func() RR { return new(CDS) },
+	TypeCERT:    func() RR { return new(CERT) },
+	TypeCNAME:   func() RR { return new(CNAME) },
 	TypeCSYNC:       func() RR { return new(CSYNC) },
 	TypeDHCID:       func() RR { return new(DHCID) },
 	TypeDLV:         func() RR { return new(DLV) },
@@ -88,20 +88,20 @@ var TypeToRR = map[uint16]func() RR{
 
 // TypeToString is a map of strings for each RR type.
 var TypeToString = map[uint16]string{
-	TypeA:           "A",
-	TypeAAAA:        "AAAA",
-	TypeAFSDB:       "AFSDB",
-	TypeANY:         "ANY",
-	TypeAPL:         "APL",
-	TypeATMA:        "ATMA",
-	TypeAVC:         "AVC",
-	TypeAXFR:        "AXFR",
-	TypeCAA:         "CAA",
-	TypeCDNSKEY:     "CDNSKEY",
-	TypeCDS:         "CDS",
-	TypeCERT:        "CERT",
-	TypeCNAME:       "CNAME",
-	TypeCSYNC:       "CSYNC",
+	TypeA:       "A",
+	TypeAAAA:    "AAAA",
+	TypeAFSDB:   "AFSDB",
+	TypeANY:     "ANY",
+	TypeAPL:     "APL",
+	TypeATMA:    "ATMA",
+	TypeAVC:     "AVC",
+	TypeAXFR:    "AXFR",
+	TypeCAA:     "CAA",
+	TypeCDNSKEY: "CDNSKEY",
+	TypeCDS:     "CDS",
+	TypeCERT:    "CERT",
+	TypeCNAME:   "CNAME",
+	TypeCSYNC:   "CSYNC",
 	TypeDHCID:       "DHCID",
 	TypeDLV:         "DLV",
 	TypeDNAME:       "DNAME",
@@ -175,18 +175,18 @@ var TypeToString = map[uint16]string{
 	TypeDNSSECProof: "DNSSECProof",
 }
 
-func (rr *A) Header() *RR_Header          { return &rr.Hdr }
-func (rr *AAAA) Header() *RR_Header       { return &rr.Hdr }
-func (rr *AFSDB) Header() *RR_Header      { return &rr.Hdr }
-func (rr *ANY) Header() *RR_Header        { return &rr.Hdr }
-func (rr *APL) Header() *RR_Header        { return &rr.Hdr }
-func (rr *AVC) Header() *RR_Header        { return &rr.Hdr }
-func (rr *CAA) Header() *RR_Header        { return &rr.Hdr }
-func (rr *CDNSKEY) Header() *RR_Header    { return &rr.Hdr }
-func (rr *CDS) Header() *RR_Header        { return &rr.Hdr }
-func (rr *CERT) Header() *RR_Header       { return &rr.Hdr }
-func (rr *CNAME) Header() *RR_Header      { return &rr.Hdr }
-func (rr *CSYNC) Header() *RR_Header      { return &rr.Hdr }
+func (rr *A) Header() *RR_Header       { return &rr.Hdr }
+func (rr *AAAA) Header() *RR_Header    { return &rr.Hdr }
+func (rr *AFSDB) Header() *RR_Header   { return &rr.Hdr }
+func (rr *ANY) Header() *RR_Header     { return &rr.Hdr }
+func (rr *APL) Header() *RR_Header     { return &rr.Hdr }
+func (rr *AVC) Header() *RR_Header     { return &rr.Hdr }
+func (rr *CAA) Header() *RR_Header     { return &rr.Hdr }
+func (rr *CDNSKEY) Header() *RR_Header { return &rr.Hdr }
+func (rr *CDS) Header() *RR_Header     { return &rr.Hdr }
+func (rr *CERT) Header() *RR_Header    { return &rr.Hdr }
+func (rr *CNAME) Header() *RR_Header   { return &rr.Hdr }
+func (rr *CSYNC) Header() *RR_Header   { return &rr.Hdr }
 func (rr *DHCID) Header() *RR_Header      { return &rr.Hdr }
 func (rr *DLV) Header() *RR_Header        { return &rr.Hdr }
 func (rr *DNAME) Header() *RR_Header      { return &rr.Hdr }
