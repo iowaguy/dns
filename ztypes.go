@@ -20,6 +20,7 @@ var TypeToRR = map[uint16]func() RR{
 	TypeCDS:     func() RR { return new(CDS) },
 	TypeCERT:    func() RR { return new(CERT) },
 	TypeCNAME:   func() RR { return new(CNAME) },
+	// TypeChain:       func() RR { return new(Chain) },
 	TypeCSYNC:       func() RR { return new(CSYNC) },
 	TypeDHCID:       func() RR { return new(DHCID) },
 	TypeDLV:         func() RR { return new(DLV) },
@@ -102,6 +103,7 @@ var TypeToString = map[uint16]string{
 	TypeCERT:    "CERT",
 	TypeCNAME:   "CNAME",
 	TypeCSYNC:   "CSYNC",
+	// TypeChain:       "Chain",
 	TypeDHCID:       "DHCID",
 	TypeDLV:         "DLV",
 	TypeDNAME:       "DNAME",
@@ -171,6 +173,7 @@ var TypeToString = map[uint16]string{
 	TypeURI:         "URI",
 	TypeX25:         "X25",
 	TypeZONEMD:      "ZONEMD",
+	TypeZone:        "Zone",
 	TypeNSAPPTR:     "NSAP-PTR",
 	TypeDNSSECProof: "DNSSECProof",
 }

@@ -96,6 +96,8 @@ const (
 	TypeEUI48       uint16 = 108
 	TypeEUI64       uint16 = 109
 	TypeDNSSECProof uint16 = 110
+	TypeZone        uint16 = 111
+	TypeChain       uint16 = 112
 	TypeURI         uint16 = 256
 	TypeCAA         uint16 = 257
 	TypeAVC         uint16 = 258
@@ -220,6 +222,25 @@ var CertTypeToString = map[uint16]string{
 }
 
 //go:generate go run types_generate.go
+
+// This section contains records used for DNSSEC serialization
+type Zone struct {
+	Hdr          RR_Header
+	Name         string `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
+	PreviousName string `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
+	ZSKIndex     uint8
+	NumKeys      uint8
+	Keys         []DNSKEY `dns:"dnskey"`
+	KeySigs      []RRSIG
+	NumDS 			 uint8
+	DSSet        []DS
+	DSSigs       []RRSIG
+	NumLeaves    uint8
+	Leaves       []RR
+	LeavesSigs   []RRSIG
+}
+
+//////////////////////////////////////////////////////////////
 
 // Question holds a DNS question. Usually there is just one. While the
 // original DNS RFCs allow multiple questions in the question section of a
@@ -1557,4 +1578,20 @@ func splitN(s string, n int) []string {
 	}
 
 	return sx
+}
+
+func countKeyTypes(keys []DNSKEY) (numZSKs, numKSKs int) {
+	numZSKs = 0
+	numKSKs = 0
+	for _, key := range keys {
+		// RFC 4034 2.1.1 Bit 7 of the Flags field is the Zone Key flag. If bit 7
+		// has value 1, then the DNSKEY record holds a DNS zone key.
+		if key.Flags&ZONE == ZONE {
+			numZSKs++
+		} else {
+			numKSKs++
+		}
+	}
+
+	return numZSKs, numKSKs
 }

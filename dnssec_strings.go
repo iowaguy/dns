@@ -97,3 +97,39 @@ func (rr *Leaving) String() string {
 
 	return s
 }
+
+func (rr *Zone) String() string {
+	var keysBuffer bytes.Buffer
+	for _, key := range rr.Keys {
+		keysBuffer.WriteString(key.String())
+	}
+	for _, keySig := range rr.KeySigs {
+		keysBuffer.WriteString(keySig.String())
+	}
+
+	var dsBuffer bytes.Buffer
+	for _, ds := range rr.DSSet {
+		dsBuffer.WriteString(ds.String())
+	}
+	for _, dsSig := range rr.DSSigs {
+		dsBuffer.WriteString(dsSig.String())
+	}
+
+	var leavesBuffer bytes.Buffer
+	for _, leaf := range rr.Leaves {
+		leavesBuffer.WriteString(leaf.String())
+	}
+	for _, leafvesSig := range rr.LeavesSigs {
+		leavesBuffer.WriteString(leafvesSig.String())
+	}
+
+	return rr.Name + " " +
+		rr.PreviousName + " " +
+		strconv.Itoa(int(rr.ZSKIndex)) + " " +
+		strconv.Itoa(int(rr.NumKeys)) + " " +
+		keysBuffer.String() + " " +
+		strconv.Itoa(int(rr.NumDS)) + " " +
+		dsBuffer.String() + " " +
+		strconv.Itoa(int(rr.NumLeaves)) + " " +
+		leavesBuffer.String()
+}

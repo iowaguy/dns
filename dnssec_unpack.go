@@ -1,5 +1,85 @@
 package dns
 
+func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
+	rdStart := off
+	_ = rdStart
+
+	rr.Name, off, err = UnpackDomainName(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.PreviousName, off, err = UnpackDomainName(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.ZSKIndex, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.NumKeys, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+
+	rr.Keys = make([]DNSKEY, rr.NumKeys)
+	for i := 0; i < int(rr.NumKeys); i++ {
+		off, err = rr.Keys[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+
+	// The number of ZSKs will be equal to the number of RRSIGs for non-key types.
+	// For keys, the number of RRSIGs will be the number of KSKs.
+	numZSKs, numKSKs := countKeyTypes(rr.Keys)
+	rr.KeySigs = make([]RRSIG, numKSKs)
+	for i := 0; i < numKSKs; i++ {
+		off, err = rr.KeySigs[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+
+	rr.NumDS, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.DSSet = make([]DS, rr.NumDS)
+	for i := 0; i < int(rr.NumDS); i++ {
+		off, err = rr.DSSet[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+	rr.DSSigs = make([]RRSIG, numZSKs)
+	for i := 0; i < numZSKs; i++ {
+		off, err = rr.DSSigs[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+	rr.NumLeaves, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.Leaves = make([]RR, rr.NumLeaves)
+	for i := 0; i < int(rr.NumLeaves); i++ {
+		off, err = rr.Leaves[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+	rr.LeavesSigs = make([]RRSIG, numZSKs)
+	for i := 0; i < numZSKs; i++ {
+		off, err = rr.LeavesSigs[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+
+	return off, nil
+}
+
 func (rr *Signature) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart

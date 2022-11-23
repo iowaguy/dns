@@ -124,3 +124,46 @@ func copyDataSerialDS(s *SerialDS) *SerialDS {
 		newDigest,
 	}
 }
+
+func (rr *Zone) copy() RR {
+	Keys := make([]DNSKEY, len(rr.Keys))
+	for i, e := range rr.Keys {
+		Keys[i] = *e.copy().(*DNSKEY)
+	}
+	KeySigs := make([]RRSIG, len(rr.KeySigs))
+	for i, e := range rr.KeySigs {
+		KeySigs[i] = *e.copy().(*RRSIG)
+	}
+	DSSet := make([]DS, len(rr.DSSet))
+	for i, e := range rr.DSSet {
+		DSSet[i] = *e.copy().(*DS)
+	}
+	DSSigs := make([]RRSIG, len(rr.DSSigs))
+	for i, e := range rr.DSSigs {
+		DSSigs[i] = *e.copy().(*RRSIG)
+	}
+	Leaves := make([]RR, len(rr.Leaves))
+	for i, e := range rr.Leaves {
+		Leaves[i] = e.copy().(RR)
+	}
+	LeafSigs := make([]RRSIG, len(rr.LeavesSigs))
+	for i, e := range rr.LeavesSigs {
+		LeafSigs[i] = *e.copy().(*RRSIG)
+	}
+
+	return &Zone{
+		rr.Hdr,
+		rr.Name,
+		rr.PreviousName,
+		rr.ZSKIndex,
+		rr.NumKeys,
+		Keys,
+		KeySigs,
+		rr.NumDS,
+		DSSet,
+		DSSigs,
+		rr.NumLeaves,
+		Leaves,
+		LeafSigs,
+	}
+}
