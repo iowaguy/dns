@@ -4,7 +4,6 @@ func (rr *Chain) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart
 
-
 	rr.Version, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return off, err

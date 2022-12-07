@@ -91,20 +91,20 @@ var TypeToRR = map[uint16]func() RR{
 
 // TypeToString is a map of strings for each RR type.
 var TypeToString = map[uint16]string{
-	TypeA:       "A",
-	TypeAAAA:    "AAAA",
-	TypeAFSDB:   "AFSDB",
-	TypeANY:     "ANY",
-	TypeAPL:     "APL",
-	TypeATMA:    "ATMA",
-	TypeAVC:     "AVC",
-	TypeAXFR:    "AXFR",
-	TypeCAA:     "CAA",
-	TypeCDNSKEY: "CDNSKEY",
-	TypeCDS:     "CDS",
-	TypeCERT:    "CERT",
-	TypeCNAME:   "CNAME",
-	TypeCSYNC:   "CSYNC",
+	TypeA:           "A",
+	TypeAAAA:        "AAAA",
+	TypeAFSDB:       "AFSDB",
+	TypeANY:         "ANY",
+	TypeAPL:         "APL",
+	TypeATMA:        "ATMA",
+	TypeAVC:         "AVC",
+	TypeAXFR:        "AXFR",
+	TypeCAA:         "CAA",
+	TypeCDNSKEY:     "CDNSKEY",
+	TypeCDS:         "CDS",
+	TypeCERT:        "CERT",
+	TypeCNAME:       "CNAME",
+	TypeCSYNC:       "CSYNC",
 	TypeChain:       "Chain",
 	TypeDHCID:       "DHCID",
 	TypeDLV:         "DLV",
@@ -180,18 +180,18 @@ var TypeToString = map[uint16]string{
 	TypeDNSSECProof: "DNSSECProof",
 }
 
-func (rr *A) Header() *RR_Header       { return &rr.Hdr }
-func (rr *AAAA) Header() *RR_Header    { return &rr.Hdr }
-func (rr *AFSDB) Header() *RR_Header   { return &rr.Hdr }
-func (rr *ANY) Header() *RR_Header     { return &rr.Hdr }
-func (rr *APL) Header() *RR_Header     { return &rr.Hdr }
-func (rr *AVC) Header() *RR_Header     { return &rr.Hdr }
-func (rr *CAA) Header() *RR_Header     { return &rr.Hdr }
-func (rr *CDNSKEY) Header() *RR_Header { return &rr.Hdr }
-func (rr *CDS) Header() *RR_Header     { return &rr.Hdr }
-func (rr *CERT) Header() *RR_Header    { return &rr.Hdr }
-func (rr *CNAME) Header() *RR_Header   { return &rr.Hdr }
-func (rr *CSYNC) Header() *RR_Header   { return &rr.Hdr }
+func (rr *A) Header() *RR_Header          { return &rr.Hdr }
+func (rr *AAAA) Header() *RR_Header       { return &rr.Hdr }
+func (rr *AFSDB) Header() *RR_Header      { return &rr.Hdr }
+func (rr *ANY) Header() *RR_Header        { return &rr.Hdr }
+func (rr *APL) Header() *RR_Header        { return &rr.Hdr }
+func (rr *AVC) Header() *RR_Header        { return &rr.Hdr }
+func (rr *CAA) Header() *RR_Header        { return &rr.Hdr }
+func (rr *CDNSKEY) Header() *RR_Header    { return &rr.Hdr }
+func (rr *CDS) Header() *RR_Header        { return &rr.Hdr }
+func (rr *CERT) Header() *RR_Header       { return &rr.Hdr }
+func (rr *CNAME) Header() *RR_Header      { return &rr.Hdr }
+func (rr *CSYNC) Header() *RR_Header      { return &rr.Hdr }
 func (rr *DHCID) Header() *RR_Header      { return &rr.Hdr }
 func (rr *DLV) Header() *RR_Header        { return &rr.Hdr }
 func (rr *DNAME) Header() *RR_Header      { return &rr.Hdr }
