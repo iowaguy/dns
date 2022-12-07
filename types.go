@@ -224,6 +224,15 @@ var CertTypeToString = map[uint16]string{
 //go:generate go run types_generate.go
 
 // This section contains records used for DNSSEC serialization
+type Chain struct {
+	Hdr             RR_Header
+	Version         uint8
+	PreviousZone    string `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
+	InitialKeyTag   uint16
+	NumZones        uint8
+	Zones           []Zone
+}
+
 type Zone struct {
 	Hdr          RR_Header
 	Name         string `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
@@ -232,7 +241,7 @@ type Zone struct {
 	NumKeys      uint8
 	Keys         []DNSKEY `dns:"dnskey"`
 	KeySigs      []RRSIG
-	NumDS 			 uint8
+	NumDS   		 uint8
 	DSSet        []DS
 	DSSigs       []RRSIG
 	NumLeaves    uint8

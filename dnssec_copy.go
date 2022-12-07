@@ -167,3 +167,18 @@ func (rr *Zone) copy() RR {
 		LeafSigs,
 	}
 }
+
+func (rr *Chain) copy() RR {
+	zones := make([]Zone, rr.NumZones)
+	for i, z := range rr.Zones {
+		zones[i] = *z.copy().(*Zone)
+	}
+	return &Chain{
+		rr.Hdr,
+		rr.Version,
+		rr.PreviousZone,
+		rr.InitialKeyTag,
+		rr.NumZones,
+		zones,
+	}
+}

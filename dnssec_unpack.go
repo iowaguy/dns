@@ -1,5 +1,36 @@
 package dns
 
+func (rr *Chain) unpack(msg []byte, off int) (off1 int, err error) {
+	rdStart := off
+	_ = rdStart
+
+
+	rr.Version, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.PreviousZone, off, err = UnpackDomainName(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.InitialKeyTag, off, err = unpackUint16(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.NumZones, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.Zones = make([]Zone, rr.NumZones)
+	for i := 0; i < int(rr.NumZones); i++ {
+		off, err = rr.Zones[i].unpack(msg, off)
+		if err != nil {
+			return off, err
+		}
+	}
+	return off, nil
+}
+
 func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart

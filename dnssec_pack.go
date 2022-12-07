@@ -1,5 +1,31 @@
 package dns
 
+func (rr *Chain) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
+	off, err = packUint8(rr.Version, msg, off)
+	if err != nil {
+		return off, err
+	}
+	off, err = packDomainName(string(rr.PreviousZone), msg, off, compression, compress)
+	if err != nil {
+		return off, err
+	}
+	off, err = packUint16(rr.InitialKeyTag, msg, off)
+	if err != nil {
+		return off, err
+	}
+	off, err = packUint8(rr.NumZones, msg, off)
+	if err != nil {
+		return off, err
+	}
+	for _, zone := range rr.Zones {
+		off, err = PackRR(&zone, msg, off, compression.ext, compress)
+		if err != nil {
+			return off, err
+		}
+	}
+	return off, nil
+}
+
 func (rr *Zone) pack(msg []byte, off int, compression compressionMap, compress bool) (off1 int, err error) {
 	off, err = packDomainName(string(rr.Name), msg, off, compression, compress)
 	if err != nil {

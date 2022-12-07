@@ -102,3 +102,32 @@ func (r1 *Zone) isDuplicate(_r2 RR) bool {
 	}
 	return true
 }
+
+func (r1 *Chain) isDuplicate(_r2 RR) bool {
+	r2, ok := _r2.(*Chain)
+	if !ok {
+		return false
+	}
+	_ = r2
+	if r1.Version != r2.Version {
+		return false
+	}
+	if !isDuplicateName(r1.PreviousZone, r2.PreviousZone) {
+		return false
+	}
+	if r1.InitialKeyTag != r2.InitialKeyTag {
+		return false
+	}
+	if r1.NumZones != r2.NumZones {
+		return false
+	}
+	if len(r1.Zones) != len(r2.Zones) {
+		return false
+	}
+	for i := 0; i < len(r1.Zones); i++ {
+		if r1.Zones[i] != r2.Zones[i] {
+			return false
+		}
+	}
+	return true
+}

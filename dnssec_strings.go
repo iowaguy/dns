@@ -133,3 +133,16 @@ func (rr *Zone) String() string {
 		strconv.Itoa(int(rr.NumLeaves)) + " " +
 		leavesBuffer.String()
 }
+
+func (rr *Chain) String() string {
+	var zonesBuffer bytes.Buffer
+	for _, zone := range rr.Zones {
+		zonesBuffer.WriteString(zone.String())
+	}
+
+	return strconv.Itoa(int(rr.Version)) + " " +
+		rr.PreviousZone + " " +
+		strconv.Itoa(int(rr.InitialKeyTag)) + " " +
+		strconv.Itoa(int(rr.NumZones)) + " " +
+		zonesBuffer.String()
+}

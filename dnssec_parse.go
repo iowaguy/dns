@@ -36,3 +36,7 @@ func (rr *Leaving) parse(c *zlexer, o string) *ParseError {
 func (rr *Zone) parse(c *zlexer, o string) *ParseError {
 	return &ParseError{}
 }
+
+func (rr *Chain) parse(c *zlexer, o string) *ParseError {
+	return &ParseError{}
+}
