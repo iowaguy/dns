@@ -85,6 +85,8 @@ var TypeToRR = map[uint16]func() RR{
 	TypeX25:         func() RR { return new(X25) },
 	TypeZONEMD:      func() RR { return new(ZONEMD) },
 	TypeDNSSECProof: func() RR { return new(DNSSECProof) },
+	TypeChain:       func() RR { return new(Chain) },
+	TypeZone:        func() RR { return new(Zone) },
 }
 
 // TypeToString is a map of strings for each RR type.
@@ -103,7 +105,7 @@ var TypeToString = map[uint16]string{
 	TypeCERT:    "CERT",
 	TypeCNAME:   "CNAME",
 	TypeCSYNC:   "CSYNC",
-	// TypeChain:       "Chain",
+	TypeChain:       "Chain",
 	TypeDHCID:       "DHCID",
 	TypeDLV:         "DLV",
 	TypeDNAME:       "DNAME",
