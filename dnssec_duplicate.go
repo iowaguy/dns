@@ -34,10 +34,10 @@ func (r1 *Zone) isDuplicate(_r2 RR) bool {
 		return false
 	}
 	_ = r2
-	if !isDuplicateName(r1.Name, r2.Name) {
+	if !isDuplicateName(string(r1.Name), string(r2.Name)) {
 		return false
 	}
-	if !isDuplicateName(r1.PreviousName, r2.PreviousName) {
+	if !isDuplicateName(string(r1.PreviousName), string(r2.PreviousName)) {
 		return false
 	}
 	if r1.ZSKIndex != r2.ZSKIndex {

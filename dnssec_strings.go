@@ -123,8 +123,8 @@ func (rr *Zone) String() string {
 		leavesBuffer.WriteString(leafvesSig.String())
 	}
 
-	return rr.Name + " " +
-		rr.PreviousName + " " +
+	return string(rr.Name) + " " +
+		string(rr.PreviousName) + " " +
 		strconv.Itoa(int(rr.ZSKIndex)) + " " +
 		strconv.Itoa(int(rr.NumKeys)) + " " +
 		keysBuffer.String() + " " +
