@@ -5,10 +5,6 @@ func (rr *Chain) pack(msg []byte, off int, compression compressionMap, compress 
 	if err != nil {
 		return off, err
 	}
-	off, err = packDomainName(string(rr.PreviousZone), msg, off, compression, compress)
-	if err != nil {
-		return off, err
-	}
 	off, err = packUint16(rr.InitialKeyTag, msg, off)
 	if err != nil {
 		return off, err

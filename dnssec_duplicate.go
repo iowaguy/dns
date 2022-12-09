@@ -112,9 +112,6 @@ func (r1 *Chain) isDuplicate(_r2 RR) bool {
 	if r1.Version != r2.Version {
 		return false
 	}
-	if !isDuplicateName(r1.PreviousZone, r2.PreviousZone) {
-		return false
-	}
 	if r1.InitialKeyTag != r2.InitialKeyTag {
 		return false
 	}
@@ -125,7 +122,7 @@ func (r1 *Chain) isDuplicate(_r2 RR) bool {
 		return false
 	}
 	for i := 0; i < len(r1.Zones); i++ {
-		if r1.Zones[i] != r2.Zones[i] {
+		if r1.Zones[i].isDuplicate(&r2.Zones[i]) {
 			return false
 		}
 	}

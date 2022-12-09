@@ -227,7 +227,6 @@ var CertTypeToString = map[uint16]string{
 type Chain struct {
 	Hdr           RR_Header
 	Version       uint8
-	PreviousZone  Name `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
 	InitialKeyTag uint16
 	NumZones      uint8
 	Zones         []Zone

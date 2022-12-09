@@ -176,7 +176,6 @@ func (rr *Chain) copy() RR {
 	return &Chain{
 		rr.Hdr,
 		rr.Version,
-		rr.PreviousZone,
 		rr.InitialKeyTag,
 		rr.NumZones,
 		zones,

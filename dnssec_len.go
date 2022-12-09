@@ -96,8 +96,7 @@ func (rr *Leaving) len(off int, compression map[string]struct{}) int {
 func (rr *Chain) len(off int, compression map[string]struct{}) int {
 	l := rr.Hdr.len(off, compression)
 	l += 1 // Version, uint8
-	l += domainNameLen(rr.PreviousZone, off+l, compression, true)
-	l += 2 // Initial_key_tag, uint16
+	l += 2 // InitialKeyTag, uint16
 	l += 1 // NumZones, uint8
 	for _, zone := range rr.Zones {
 		l += zone.len(off, compression)
@@ -107,8 +106,8 @@ func (rr *Chain) len(off int, compression map[string]struct{}) int {
 
 func (rr *Zone) len(off int, compression map[string]struct{}) int {
 	l := rr.Hdr.len(off, compression)
-	l += domainNameLen(rr.Name, off+l, compression, true)
-	l += domainNameLen(rr.PreviousName, off+l, compression, true)
+	l += domainNameLen(string(rr.Name), off+l, compression, true)
+	l += domainNameLen(string(rr.PreviousName), off+l, compression, true)
 	l += 1 // ZSKIndex, uint8
 	l += 1 // NumKeys, uint8
 

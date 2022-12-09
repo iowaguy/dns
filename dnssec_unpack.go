@@ -8,10 +8,6 @@ func (rr *Chain) unpack(msg []byte, off int) (off1 int, err error) {
 	if err != nil {
 		return off, err
 	}
-	rr.PreviousZone, off, err = UnpackDomainName(msg, off)
-	if err != nil {
-		return off, err
-	}
 	rr.InitialKeyTag, off, err = unpackUint16(msg, off)
 	if err != nil {
 		return off, err
@@ -34,14 +30,18 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart
 
-	rr.Name, off, err = UnpackDomainName(msg, off)
+	tmpName, off, err := UnpackDomainName(msg, off)
 	if err != nil {
 		return off, err
 	}
-	rr.PreviousName, off, err = UnpackDomainName(msg, off)
+	rr.Name = Name(tmpName)
+
+	tmpName, off, err = UnpackDomainName(msg, off)
 	if err != nil {
 		return off, err
 	}
+	rr.PreviousName = Name(tmpName)
+
 	rr.ZSKIndex, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return off, err
