@@ -1,5 +1,7 @@
 package dns
 
+import "errors"
+
 func (rr *Chain) unpack(msg []byte, off int) (off1 int, err error) {
 	rdStart := off
 	_ = rdStart
@@ -18,10 +20,15 @@ func (rr *Chain) unpack(msg []byte, off int) (off1 int, err error) {
 	}
 	rr.Zones = make([]Zone, rr.NumZones)
 	for i := 0; i < int(rr.NumZones); i++ {
-		off, err = rr.Zones[i].unpack(msg, off)
+		r, off, err := UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
+		v, ok := r.(*Zone)
+		if !ok {
+			return off, errors.New("expected ZONE, received something else")
+		}
+		rr.Zones[i] = *v
 	}
 	return off, nil
 }
@@ -53,10 +60,15 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 
 	rr.Keys = make([]DNSKEY, rr.NumKeys)
 	for i := 0; i < int(rr.NumKeys); i++ {
-		off, err = rr.Keys[i].unpack(msg, off)
+		r, off, err := UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
+		v, ok := r.(*DNSKEY)
+		if !ok {
+			return off, errors.New("expected DNSKEY, received something else")
+		}
+		rr.Keys[i] = *v
 	}
 
 	// The number of ZSKs will be equal to the number of RRSIGs for non-key types.
@@ -64,10 +76,15 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 	numZSKs, numKSKs := countKeyTypes(rr.Keys)
 	rr.KeySigs = make([]RRSIG, numKSKs)
 	for i := 0; i < numKSKs; i++ {
-		off, err = rr.KeySigs[i].unpack(msg, off)
+		r, off, err := UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
+		v, ok := r.(*RRSIG)
+		if !ok {
+			return off, errors.New("expected RRSIG, received something else")
+		}
+		rr.KeySigs[i] = *v
 	}
 
 	rr.NumDS, off, err = unpackUint8(msg, off)
@@ -76,17 +93,27 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 	}
 	rr.DSSet = make([]DS, rr.NumDS)
 	for i := 0; i < int(rr.NumDS); i++ {
-		off, err = rr.DSSet[i].unpack(msg, off)
+		r, off, err := UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
+		v, ok := r.(*DS)
+		if !ok {
+			return off, errors.New("expected DS, received something else")
+		}
+		rr.DSSet[i] = *v
 	}
 	rr.DSSigs = make([]RRSIG, numZSKs)
 	for i := 0; i < numZSKs; i++ {
-		off, err = rr.DSSigs[i].unpack(msg, off)
+		r, off, err := UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
+		v, ok := r.(*RRSIG)
+		if !ok {
+			return off, errors.New("expected RRSIG, received something else")
+		}
+		rr.DSSigs[i] = *v
 	}
 	rr.NumLeaves, off, err = unpackUint8(msg, off)
 	if err != nil {
@@ -94,17 +121,22 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 	}
 	rr.Leaves = make([]RR, rr.NumLeaves)
 	for i := 0; i < int(rr.NumLeaves); i++ {
-		off, err = rr.Leaves[i].unpack(msg, off)
+		rr.Leaves[i], off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
 	}
 	rr.LeavesSigs = make([]RRSIG, numZSKs)
 	for i := 0; i < numZSKs; i++ {
-		off, err = rr.LeavesSigs[i].unpack(msg, off)
+		r, off, err := UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
+		v, ok := r.(*RRSIG)
+		if !ok {
+			return off, errors.New("expected RRSIG, received something else")
+		}
+		rr.LeavesSigs[i] = *v
 	}
 
 	return off, nil
