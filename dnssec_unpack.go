@@ -20,7 +20,8 @@ func (rr *Chain) unpack(msg []byte, off int) (off1 int, err error) {
 	}
 	rr.Zones = make([]Zone, rr.NumZones)
 	for i := 0; i < int(rr.NumZones); i++ {
-		r, off, err := UnpackRR(msg, off)
+		var r RR
+		r, off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -60,7 +61,8 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 
 	rr.Keys = make([]DNSKEY, rr.NumKeys)
 	for i := 0; i < int(rr.NumKeys); i++ {
-		r, off, err := UnpackRR(msg, off)
+		var r RR
+		r, off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -71,12 +73,15 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 		rr.Keys[i] = *v
 	}
 
-	// The number of ZSKs will be equal to the number of RRSIGs for non-key types.
-	// For keys, the number of RRSIGs will be the number of KSKs.
-	numZSKs, numKSKs := countKeyTypes(rr.Keys)
-	rr.KeySigs = make([]RRSIG, numKSKs)
-	for i := 0; i < numKSKs; i++ {
-		r, off, err := UnpackRR(msg, off)
+	rr.NumKeySigs, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+
+	rr.KeySigs = make([]RRSIG, rr.NumKeySigs)
+	for i := 0; i < int(rr.NumKeySigs); i++ {
+		var r RR
+		r, off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -93,7 +98,8 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 	}
 	rr.DSSet = make([]DS, rr.NumDS)
 	for i := 0; i < int(rr.NumDS); i++ {
-		r, off, err := UnpackRR(msg, off)
+		var r RR
+		r, off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -103,9 +109,14 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 		}
 		rr.DSSet[i] = *v
 	}
-	rr.DSSigs = make([]RRSIG, numZSKs)
-	for i := 0; i < numZSKs; i++ {
-		r, off, err := UnpackRR(msg, off)
+	rr.NumDSSigs, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.DSSigs = make([]RRSIG, rr.NumDSSigs)
+	for i := 0; i < int(rr.NumDSSigs); i++ {
+		var r RR
+		r, off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}
@@ -115,6 +126,7 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 		}
 		rr.DSSigs[i] = *v
 	}
+
 	rr.NumLeaves, off, err = unpackUint8(msg, off)
 	if err != nil {
 		return off, err
@@ -126,9 +138,14 @@ func (rr *Zone) unpack(msg []byte, off int) (off1 int, err error) {
 			return off, err
 		}
 	}
-	rr.LeavesSigs = make([]RRSIG, numZSKs)
-	for i := 0; i < numZSKs; i++ {
-		r, off, err := UnpackRR(msg, off)
+	rr.NumLeavesSigs, off, err = unpackUint8(msg, off)
+	if err != nil {
+		return off, err
+	}
+	rr.LeavesSigs = make([]RRSIG, rr.NumLeavesSigs)
+	for i := 0; i < int(rr.NumLeavesSigs); i++ {
+		var r RR
+		r, off, err = UnpackRR(msg, off)
 		if err != nil {
 			return off, err
 		}

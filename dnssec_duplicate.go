@@ -54,6 +54,9 @@ func (r1 *Zone) isDuplicate(_r2 RR) bool {
 			return false
 		}
 	}
+	if r1.NumKeySigs != r2.NumKeySigs {
+		return false
+	}
 	if len(r1.KeySigs) != len(r2.KeySigs) {
 		return false
 	}
@@ -73,6 +76,9 @@ func (r1 *Zone) isDuplicate(_r2 RR) bool {
 			return false
 		}
 	}
+	if r1.NumDSSigs != r2.NumDSSigs {
+		return false
+	}
 	if len(r1.DSSigs) != len(r2.DSSigs) {
 		return false
 	}
@@ -91,6 +97,9 @@ func (r1 *Zone) isDuplicate(_r2 RR) bool {
 		if r1.Leaves[i] != r2.Leaves[i] {
 			return false
 		}
+	}
+	if r1.NumLeavesSigs != r2.NumLeavesSigs {
+		return false
 	}
 	if len(r1.LeavesSigs) != len(r2.LeavesSigs) {
 		return false

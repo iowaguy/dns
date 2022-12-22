@@ -116,6 +116,8 @@ func (rr *Zone) len(off int, compression map[string]struct{}) int {
 		l += key.len(off, compression)
 	}
 
+	l += 1 // NumKeySigs, uint8
+
 	// RRSIGs
 	for _, sig := range rr.KeySigs {
 		l += sig.len(off, compression)
@@ -127,6 +129,8 @@ func (rr *Zone) len(off int, compression map[string]struct{}) int {
 	for _, ds := range rr.DSSet {
 		l += ds.len(off, compression)
 	}
+
+	l += 1 // NumDSSigs, uint8
 
 	// DSSigs
 	for _, dsSig := range rr.DSSigs {
@@ -140,7 +144,9 @@ func (rr *Zone) len(off int, compression map[string]struct{}) int {
 		l += leaf.len(off, compression)
 	}
 
-	// Leaves
+	l += 1 // NumLeavesSigs, uint8
+
+	// LeavesSigs
 	for _, leafSig := range rr.LeavesSigs {
 		l += leafSig.len(off, compression)
 	}

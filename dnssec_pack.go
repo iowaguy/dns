@@ -45,6 +45,10 @@ func (rr *Zone) pack(msg []byte, off int, compression compressionMap, compress b
 			return off, err
 		}
 	}
+	off, err = packUint8(rr.NumKeySigs, msg, off)
+	if err != nil {
+		return off, err
+	}
 	for _, sig := range rr.KeySigs {
 		off, err = PackRR(&sig, msg, off, compression.ext, compress)
 		if err != nil {
@@ -61,6 +65,10 @@ func (rr *Zone) pack(msg []byte, off int, compression compressionMap, compress b
 			return off, err
 		}
 	}
+	off, err = packUint8(rr.NumDSSigs, msg, off)
+	if err != nil {
+		return off, err
+	}
 	for _, dsSig := range rr.DSSigs {
 		off, err = PackRR(&dsSig, msg, off, compression.ext, compress)
 		if err != nil {
@@ -76,6 +84,10 @@ func (rr *Zone) pack(msg []byte, off int, compression compressionMap, compress b
 		if err != nil {
 			return off, err
 		}
+	}
+	off, err = packUint8(rr.NumLeavesSigs, msg, off)
+	if err != nil {
+		return off, err
 	}
 	for _, leafSig := range rr.LeavesSigs {
 		off, err = PackRR(&leafSig, msg, off, compression.ext, compress)

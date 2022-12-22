@@ -146,25 +146,28 @@ func (rr *Zone) copy() RR {
 	for i, e := range rr.Leaves {
 		Leaves[i] = e.copy().(RR)
 	}
-	LeafSigs := make([]RRSIG, len(rr.LeavesSigs))
+	LeavesSigs := make([]RRSIG, len(rr.LeavesSigs))
 	for i, e := range rr.LeavesSigs {
-		LeafSigs[i] = *e.copy().(*RRSIG)
+		LeavesSigs[i] = *e.copy().(*RRSIG)
 	}
 
 	return &Zone{
-		rr.Hdr,
-		rr.Name,
-		rr.PreviousName,
-		rr.ZSKIndex,
-		rr.NumKeys,
-		Keys,
-		KeySigs,
-		rr.NumDS,
-		DSSet,
-		DSSigs,
-		rr.NumLeaves,
-		Leaves,
-		LeafSigs,
+		Hdr:           rr.Hdr,
+		Name:          rr.Name,
+		PreviousName:  rr.PreviousName,
+		ZSKIndex:      rr.ZSKIndex,
+		NumKeys:       rr.NumKeys,
+		Keys:          Keys,
+		NumKeySigs:    rr.NumKeySigs,
+		KeySigs:       KeySigs,
+		NumDS:         rr.NumDS,
+		DSSet:         DSSet,
+		NumDSSigs:     rr.NumDSSigs,
+		DSSigs:        DSSigs,
+		NumLeaves:     rr.NumLeaves,
+		Leaves:        Leaves,
+		NumLeavesSigs: rr.NumLeavesSigs,
+		LeavesSigs:    LeavesSigs,
 	}
 }
 
@@ -174,10 +177,10 @@ func (rr *Chain) copy() RR {
 		zones[i] = *z.copy().(*Zone)
 	}
 	return &Chain{
-		rr.Hdr,
-		rr.Version,
-		rr.InitialKeyTag,
-		rr.NumZones,
-		zones,
+		Hdr:           rr.Hdr,
+		Version:       rr.Version,
+		InitialKeyTag: rr.InitialKeyTag,
+		NumZones:      rr.NumZones,
+		Zones:         zones,
 	}
 }

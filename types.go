@@ -233,19 +233,22 @@ type Chain struct {
 }
 
 type Zone struct {
-	Hdr          RR_Header
-	Name         Name `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
-	PreviousName Name `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
-	ZSKIndex     uint8
-	NumKeys      uint8
-	Keys         []DNSKEY `dns:"dnskey"`
-	KeySigs      []RRSIG
-	NumDS        uint8
-	DSSet        []DS
-	DSSigs       []RRSIG
-	NumLeaves    uint8
-	Leaves       []RR
-	LeavesSigs   []RRSIG
+	Hdr           RR_Header
+	Name          Name `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
+	PreviousName  Name `dns:"cdomain-name"` // "cdomain-name" specifies encoding (and may be compressed)
+	ZSKIndex      uint8
+	NumKeys       uint8
+	Keys          []DNSKEY `dns:"dnskey"`
+	NumKeySigs    uint8
+	KeySigs       []RRSIG
+	NumDS         uint8
+	DSSet         []DS
+	NumDSSigs     uint8
+	DSSigs        []RRSIG
+	NumLeaves     uint8
+	Leaves        []RR
+	NumLeavesSigs uint8
+	LeavesSigs    []RRSIG
 }
 
 //////////////////////////////////////////////////////////////
@@ -1594,12 +1597,13 @@ func countKeyTypes(keys []DNSKEY) (numZSKs, numKSKs int) {
 	for _, key := range keys {
 		// RFC 4034 2.1.1 Bit 7 of the Flags field is the Zone Key flag. If bit 7
 		// has value 1, then the DNSKEY record holds a DNS zone key.
-		if key.Flags&ZONE == ZONE {
-			numZSKs++
-		} else {
-			numKSKs++
+		if int(key.Flags)&ZONE == ZONE {
+			if int(key.Flags)&SEP == SEP {
+				numKSKs++
+			} else {
+				numZSKs++
+			}
 		}
 	}
-
 	return numZSKs, numKSKs
 }

@@ -103,24 +103,27 @@ func (rr *Zone) String() string {
 	for _, key := range rr.Keys {
 		keysBuffer.WriteString(key.String())
 	}
+	var keysSigsBuffer bytes.Buffer
 	for _, keySig := range rr.KeySigs {
-		keysBuffer.WriteString(keySig.String())
+		keysSigsBuffer.WriteString(keySig.String())
 	}
 
 	var dsBuffer bytes.Buffer
 	for _, ds := range rr.DSSet {
 		dsBuffer.WriteString(ds.String())
 	}
+	var dsSigsBuffer bytes.Buffer
 	for _, dsSig := range rr.DSSigs {
-		dsBuffer.WriteString(dsSig.String())
+		dsSigsBuffer.WriteString(dsSig.String())
 	}
 
 	var leavesBuffer bytes.Buffer
 	for _, leaf := range rr.Leaves {
 		leavesBuffer.WriteString(leaf.String())
 	}
-	for _, leafvesSig := range rr.LeavesSigs {
-		leavesBuffer.WriteString(leafvesSig.String())
+	var leavesSigsBuffer bytes.Buffer
+	for _, leavesSig := range rr.LeavesSigs {
+		leavesSigsBuffer.WriteString(leavesSig.String())
 	}
 
 	return string(rr.Name) + " " +
@@ -128,10 +131,16 @@ func (rr *Zone) String() string {
 		strconv.Itoa(int(rr.ZSKIndex)) + " " +
 		strconv.Itoa(int(rr.NumKeys)) + " " +
 		keysBuffer.String() + " " +
+		strconv.Itoa(int(rr.NumKeySigs)) + " " +
+		keysSigsBuffer.String() + " " +
 		strconv.Itoa(int(rr.NumDS)) + " " +
 		dsBuffer.String() + " " +
+		strconv.Itoa(int(rr.NumDSSigs)) + " " +
+		dsSigsBuffer.String() + " " +
 		strconv.Itoa(int(rr.NumLeaves)) + " " +
-		leavesBuffer.String()
+		leavesBuffer.String() + " " +
+		strconv.Itoa(int(rr.NumLeavesSigs)) + " " +
+		leavesSigsBuffer.String()
 }
 
 func (rr *Chain) String() string {
